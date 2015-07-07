@@ -6,4 +6,7 @@ playground-ui
 - CQRS Flux --> https://abdullin.com/talks/2015-01-06-dddbe-facebook-flux-reactjs/ 
 - Presentation --> https://abdullin.com/talks/2015-01-06-dddbe-facebook-flux-reactjs/
 - If need server-side React/Flux --> http://fluxible.io/
-- 
+- Use Webpack --> http://webpack.github.io/
+
+
+ 
