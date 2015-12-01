@@ -2,10 +2,6 @@ import React from 'react';
 import Note from './Note.js';
 
 export default class Notes extends React.Component {
-	constructor(props) {
-	    super(props);
-	    this.renderNote = this.renderNote.bind(this);
-	}
 
 	render() {
 		let notes = this.props.items;
@@ -13,7 +9,8 @@ export default class Notes extends React.Component {
 		return <ul className="notes">{notes.map(this.renderNote)} </ul>;
 		
 	}
-	renderNote(note) {
+
+	renderNote = (note) => {
 		return (
 			<li className="note" key={note.id}>
 				<Note
