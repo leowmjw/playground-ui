@@ -5,7 +5,7 @@ export default class Note extends React.Component {
         super(props);
 
         this.state = {
-         editing: false
+            editing: false
         };
     }
 
@@ -14,61 +14,52 @@ export default class Note extends React.Component {
 
         return (
             <div>
-                { editing ? this.renderEdit() : this.renderTask() }
+                {editing ? this.renderEdit() : this.renderTask()}
             </div>
         );
+    }
 
+    renderEdit = () => {
+        return <input type="text"
+                      autoFocus={true}
+                      defaultValue={this.props.task}
+                      onBlur={this.finishEdit}
+                      onKeyPress={this.checkEnter}/>;
+    }
 
-      }
-
-      renderEdit = () => {
-        return (
-            <input type="text"
-                autoFocus={true}
-                defaultValue={this.props.task}
-                onBlur={this.finishEdit}
-                onKeyPress={this.checkEnter} />
-
-        );
-      }
-
-      renderTask = () =>  {
+    renderTask = () => {
         const onDelete = this.props.onDelete;
 
         return (
-
-        <div onClick={this.edit}>
-            <span className="task">{this.props.task}</span>
-            { onDelete ? this.renderDelete() : null }
-        </div>
-
+            <div onClick={this.edit}>
+                <span className="task">{this.props.task}</span>
+                {onDelete ? this.renderDelete() : null }
+            </div>
         );
+    }
 
-      }
-
-      renderDelete = () => {
+    renderDelete = () => {
         return <button className="delete" onClick={this.props.onDelete}>x</button>;
-      }
+    }
 
-      edit = () => {
+    edit = () => {
         this.setState({
-           editing: true
+            editing: true
         });
-      }
+    }
 
-      checkEnter = (e) => {
+    checkEnter = (e) => {
         if (e.key === 'Enter') {
             this.finishEdit(e);
         }
+    }
 
-      }
+    finishEdit = (e) => {
 
-      finishEdit = (e) => {
         this.props.onEdit(e.target.value);
 
         this.setState({
             editing: false
         });
-      }
+    }
 }
-

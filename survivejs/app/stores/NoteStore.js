@@ -1,9 +1,6 @@
-/**
- * Created by leow on 12/1/15.
- */
-import uuid from 'node-uuid'
-import alt from '../libs/alt'
-import NoteActions from '../actions/NoteActions'
+import uuid from 'node-uuid';
+import alt from '../libs/alt';
+import NoteActions from '../actions/NoteActions';
 
 class NoteStore {
     constructor() {
@@ -13,7 +10,6 @@ class NoteStore {
     }
 
     create(note) {
-
         const notes = this.notes;
 
         note.id = uuid.v4();
@@ -34,7 +30,6 @@ class NoteStore {
         notes[noteIndex].task = task;
 
         this.setState({notes});
-
     }
 
     delete(id) {
@@ -47,12 +42,12 @@ class NoteStore {
 
         this.setState({
             notes: notes.slice(0, noteIndex).concat(notes.slice(noteIndex + 1))
-        })
+        });
     }
 
     findNote(id) {
         const notes = this.notes;
-        const noteIndex = notes.findIndex((notes) => note.id === i);
+        const noteIndex = notes.findIndex((note) => note.id === id);
 
         if (noteIndex < 0) {
             console.warn('Failed to find note', notes, id);
@@ -60,7 +55,6 @@ class NoteStore {
 
         return noteIndex;
     }
-
 }
 
 export default alt.createStore(NoteStore, 'NoteStore');

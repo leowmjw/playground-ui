@@ -1,8 +1,7 @@
-/**
- * Created by leow on 12/1/15.
- */
 import Alt from 'alt';
+//import chromeDebug from 'alt/utils/chromeDebug';
 
 const alt = new Alt();
+//chromeDebug(alt);
 
 export default alt;

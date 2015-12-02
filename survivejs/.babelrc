@@ -4,7 +4,7 @@
     "es7.decorators",
     "es7.objectRestSpread"
   ],
-  "env" : {
+  "env": {
     "start": {
       "plugins": [
         "react-transform"
@@ -16,11 +16,10 @@
               "transform": "react-transform-hmr",
               "imports": ["react"],
               "locals": ["module"]
-            }  
+            }
           ]
         }
       }
     }
   }
 }
-
