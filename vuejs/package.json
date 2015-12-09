@@ -15,6 +15,7 @@
     "babel-runtime": "^5.8.34",
     "css-loader": "^0.23.0",
     "html-webpack-plugin": "^1.7.0",
+    "html-webpack-template": "^2.5.1",
     "jade": "^1.11.0",
     "style-loader": "^0.13.0",
     "stylus-loader": "^1.4.2",

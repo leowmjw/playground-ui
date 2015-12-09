@@ -1,5 +1,5 @@
 var path = require('path');
-var HtmlwebpackPlugin = require('html-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
 var merge = require('webpack-merge');
 
@@ -10,7 +10,8 @@ process.env.BABEL_ENV = TARGET;
 
 const PATHS = {
     app: path.join(__dirname, 'app'),
-    build: path.join(__dirname, 'build')
+    build: path.join(__dirname, 'build'),
+    template: path.join(__dirname, 'template')
 };
 
 var common = {
@@ -39,8 +40,10 @@ var common = {
         ]
     },
     plugins: [
-        new HtmlwebpackPlugin({
-            title: 'VueJS Base App'
+        new HtmlWebpackPlugin({
+            title: 'VueJS Base App',
+            template: PATHS.template + '/my-index.html',
+            inject: 'body'
         })
     ]
 };

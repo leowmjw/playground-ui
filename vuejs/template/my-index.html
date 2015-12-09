@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <title>{%= o.htmlWebpackPlugin.options.title %}</title>
+</head>
+<body>
+
+<div id="app">
+    <input v-model="newTodo" @keyup.enter="addTodo">
+    <ul>
+        <li v-for="todo in todos">
+            <span>{{ todo.text }}</span>
+            <button @click="removeTodo($index)">X</button>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>
