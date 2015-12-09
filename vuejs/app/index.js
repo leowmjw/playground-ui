@@ -1,9 +1,12 @@
-require('./main.css');
+import Vue from 'vue';
+import App from './app.vue';
 
-var component = require('./component');
-var app = document.createElement('div');
-app.id = "app";
-
-document.body.appendChild(app);
-
-app.appendChild(component());
+new Vue({
+    el: 'body',
+    components: {
+        app: App
+    },
+    data: {
+        msg: 'Hello Vue.js!'
+    }
+})

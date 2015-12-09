@@ -2,12 +2,10 @@
  * Created by leow on 12/9/15.
  */
 
-var app = document.createElement('div');
+console.log('In Vue!!');
+var app = document.createElement('app');
 
 document.body.appendChild(app);
 
-app.id = 'app';
-app.textContent = '{{ message }}';
-
-require('./component');
+require('./index');
 

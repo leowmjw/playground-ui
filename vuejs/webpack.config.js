@@ -14,7 +14,7 @@ const PATHS = {
 };
 
 var common = {
-    entry: PATHS.app + '/main.js',
+    entry: PATHS.app + '/index.js',
     output: {
         path: PATHS.build,
         filename: 'bundle.js'
@@ -47,6 +47,7 @@ var common = {
 
 if (TARGET === 'start' || !TARGET) {
     module.exports = merge(common, {
+        entry: PATHS.app + '/main.js',
         devtool: 'eval-source-map',
         devServer: {
             historyApiFallback: true,
