@@ -1,26 +1,13 @@
-<template lang="jade">
-div
-    h1 {{msg}}
-</template>
+<template lang="jade" src="prez_app/test.jade" type="text/jade"></template>
 
-<script>
-export default {
-    data () {
-        return {
-            msg: 'Hello from vue-loader!'
+<script type="text/babel">
+    export default {
+        data () {
+            return {
+                msg: 'Hello from vue-loader!'
+            }
         }
     }
-}
 </script>
 
-<style lang="stylus">
-font-stack = Helvetica, sans-serif
-primary-color = #999
-body
-    font 100% font-stack
-    color primary-color
-
-.logo
-    width 40px
-    height 40px
-</style>
+<style lang="stylus" src="./prez_app/test.styl" type="text/stylus"></style>
