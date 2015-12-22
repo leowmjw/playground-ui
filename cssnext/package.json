@@ -1,0 +1,26 @@
+{
+  "name": "cssnext-base",
+  "version": "0.0.1",
+  "description": "Base for CSSNext work",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "babel": "^5.8.34",
+    "babel-loader": "^5.3.3",
+    "babel-runtime": "^5.8.34",
+    "css-loader": "^0.23.0",
+    "cssnext-loader": "^1.0.1",
+    "html-webpack-plugin": "^1.7.0",
+    "html-webpack-template": "^2.5.1",
+    "style-loader": "^0.13.0",
+    "template-html-loader": "0.0.3",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0",
+    "webpack-merge": "^0.3.2"
+  }
+}

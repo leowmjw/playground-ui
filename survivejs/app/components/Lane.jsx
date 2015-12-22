@@ -42,7 +42,6 @@ export default class Lane extends React.Component {
             </div>
         );
     }
-
     addNote(laneId) {
         NoteActions.create({task: 'New Task BOB!!'});
         LaneActions.attachToLane({laneId});
