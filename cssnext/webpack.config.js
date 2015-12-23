@@ -2,8 +2,6 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
 var merge = require('webpack-merge');
-var basscss = require('postcss-basscss');
-var cssnext = require('cssnext');
 
 // Init
 const TARGET = process.env.npm_lifecycle_event;
@@ -23,6 +21,10 @@ var common = {
     output: {
         path: PATHS.build,
         filename: 'bundle.js'
+    },
+    resolve: {
+        extensions: ['', '.json', '.js', '.css'],
+        modulesDirectories: [PATHS.app, PATHS.styles, 'node_modules']
     },
     module: {
         loaders: [
@@ -65,7 +67,8 @@ var common = {
         return [
             require('postcss-basscss')({
                 raw: true
-            })
+            }),
+            require('autoprefixer')()
         ]
     }
 };
