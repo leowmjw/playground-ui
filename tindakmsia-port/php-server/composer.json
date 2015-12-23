@@ -1,0 +1,12 @@
+{
+  "name": "tindakmsia/elections",
+  "description": "Port of TindakMsia EC site",
+  "minimum-stability": "stable",
+  "license": "AGPL v3.0",
+  "authors": [
+    {
+      "name": "Michael Leow",
+      "email": "leow@sinarproject.org"
+    }
+  ]
+}

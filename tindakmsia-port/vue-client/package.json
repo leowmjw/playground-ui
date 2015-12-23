@@ -1,0 +1,30 @@
+{
+  "name": "vue-elections-client",
+  "version": "0.0.1",
+  "description": "Base for VueJS work",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack -p",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Leow",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "babel-loader": "^5.4.0",
+    "babel-runtime": "^5.8.34",
+    "css-loader": "^0.23.1",
+    "html-webpack-plugin": "^1.7.0",
+    "style-loader": "^0.13.0",
+    "template-html-loader": "0.0.3",
+    "vue-hot-reload-api": "^1.2.2",
+    "vue-html-loader": "^1.0.0",
+    "vue-loader": "^6.1.0",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0",
+    "webpack-merge": "^0.4.0"
+  },
+  "dependencies": {
+    "vue": "^1.0.12"
+  }
+}
