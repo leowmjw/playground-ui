@@ -8,5 +8,18 @@
       "name": "Michael Leow",
       "email": "leow@sinarproject.org"
     }
-  ]
+  ],
+  "require": {
+    "rdlowrey/auryn": "1.1.0",
+    "league/route": "2.0.0-RC1",
+    "league/geotools": "0.6.0",
+    "league/fractal": "0.13.0",
+    "guzzlehttp/guzzle": "6.1.1",
+    "vlucas/phpdotenv": "2.0.x-dev",
+    "league/container": "2.0.3",
+    "league/booboo": "1.0.0"
+  },
+  "autoload": {
+    "psr-4": {"EC\\": "src/"}
+  }
 }
