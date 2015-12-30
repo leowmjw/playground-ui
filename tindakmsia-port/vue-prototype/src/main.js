@@ -1,25 +1,12 @@
-/**
- * Created by leow on 12/23/15.
- */
-
-/*
- Put data structure of all the state needed for the EC App
- // IC Number
- // Postcode
- // Address
- // GMaps Filter state
- props: point, layers
- // EC Details Filter state
- // Mapit Filter state
-
- */
-
-import Vue from 'vue';
-import app from './app.vue';
+import Vue from 'vue'
+import App from './App.vue'
+// import voterSearchBar from './components/voterSearchBar.vue';
 
 new Vue({
     el: 'body',
-    components: { app },
+    components: {
+        App
+    },
     data: {
         ic: "",
         postcode: "",

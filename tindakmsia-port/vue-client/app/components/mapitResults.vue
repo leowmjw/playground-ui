@@ -3,7 +3,7 @@
 </style>
 
 <template>
-
+    MapitResults here ..
 </template>
 
 <script>
