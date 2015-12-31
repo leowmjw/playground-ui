@@ -1,3 +1,9 @@
+// Get the global Bootstrap CSS in??
+// require('./assets/docs.css');
+// require('./assets/style.css');
+require('./bsdist/css/bootstrap.css');
+require('./bsdist/css/bootstrap-theme.css');
+
 import Vue from 'vue'
 import App from './App.vue'
 // import voterSearchBar from './components/voterSearchBar.vue';
