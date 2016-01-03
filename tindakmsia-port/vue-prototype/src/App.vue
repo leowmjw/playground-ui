@@ -5,7 +5,7 @@
 <template>
     <div>
         <div>
-            <voter-search-bar :msg=parentMsg />
+            <voter-search-bar :my-message=parentMsg />
         </div>
         <div>
             <input v-model="parentMsg"/><br/>
@@ -35,7 +35,8 @@
         },
         data () {
             return {
-                parentMsg: ""
+                parentMsg: "",
+                navState: "collapse"
             }
         }
     }

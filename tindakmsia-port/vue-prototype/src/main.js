@@ -1,8 +1,9 @@
 // Get the global Bootstrap CSS in??
 // require('./assets/docs.css');
 // require('./assets/style.css');
-require('./bsdist/css/bootstrap.css');
-require('./bsdist/css/bootstrap-theme.css');
+// require('./bsdist/css/bootstrap.css');
+// require('./bsdist/css/bootstrap-theme.css');
+// require('./assets/prism-coy.css')
 
 import Vue from 'vue'
 import App from './App.vue'
