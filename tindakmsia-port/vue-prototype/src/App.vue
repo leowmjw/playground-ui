@@ -1,42 +1,48 @@
 <style>
+    /*
+     * Base structure
+     */
+
+    /* Move down content because we have a fixed navbar that is 50px tall */
+    body {
+        padding-top: 50px;
+    }
+
+    /*
+     * Global add-ons
+     */
+
+    .sub-header {
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
 
 </style>
 
 <template>
-    <div>
-        <div>
-            <voter-search-bar :msg=parentMsg />
+    <voter-search-bar :my-message=parentMsg></voter-search-bar>
+    <div class="container-fluid">
+        <div class="row">
+            <navsidebar></navsidebar>
+            <maincontent></maincontent>
         </div>
-        <div>
-            <input v-model="parentMsg"/><br/>
-        </div>
-        <div>
-            <mapvisualization :my-message=parentMsg></mapvisualization>
-            <!--
-                <div>
-                    <ecResults></ecResults>
-                    <mapitResults></mapitResults>
-                </div>
-            -->
-        </div>
-        bob
     </div>
 </template>
 
 <script>
     import voterSearchBar from './components/voterSearchBar.vue';
-    import mapvisualization from './components/mapVisualization.vue';
+    import navsidebar from './components/navSidebar.vue';
+    import maincontent from './components/mainContent.vue';
 
     module.exports =
     {
         components: {
             'voter-search-bar': voterSearchBar,
-            mapvisualization
+            navsidebar,
+            maincontent
         },
         data () {
-            return {
-                parentMsg: ""
-            }
+            return {}
         }
     }
 
