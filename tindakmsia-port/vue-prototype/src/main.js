@@ -4,7 +4,8 @@
 // require('./bsdist/css/bootstrap.css');
 // require('./bsdist/css/bootstrap-theme.css');
 // require('./assets/prism-coy.css')
-require('./assets/dashboard.css');
+// Refactored below into the App, and all the other related components :P
+// require('./assets/dashboard.css');
 
 import Vue from 'vue'
 import App from './App.vue'
