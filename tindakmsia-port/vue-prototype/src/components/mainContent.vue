@@ -99,7 +99,9 @@
                     </div>
                 -->
             </div>
-            bob
+            <div>
+                Lat: <input v-model="mylat"> Lng: <input v-model="mylng">
+            </div>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -116,14 +118,20 @@
                     <td>Lorem</td>
                     <td>ipsum</td>
                     <td>dolor</td>
-                    <td>sit</td>
+                    <td>
+                        <div class="showtheway">
+                            <a href="https://showtheway.io/to/2.9,3.5">Magic</a>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>1,002</td>
                     <td>amet</td>
                     <td>consectetur</td>
                     <td>adipiscing</td>
-                    <td>elit</td>
+                    <td>
+                        <widgetshowtheway :mylat=mylat :mylng=mylng></widgetshowtheway>
+                    </td>
                 </tr>
                 <tr>
                     <td>1,003</td>
@@ -163,7 +171,8 @@
                 <tr>
                     <td>1,007</td>
                     <td>sagittis</td>
-                    <td>ipsum</td>
+                    <td>                        <widgetshowtheway :mylat=mylat :mylng=mylng></widgetshowtheway>
+                    </td>
                     <td>Praesent</td>
                     <td>mauris</td>
                 </tr>
@@ -232,14 +241,18 @@
 
 <script>
     import mapvisualization from './mapVisualization.vue';
+    import widgetshowtheway from './widgetShowTheWay.vue';
 
     export default {
         components: {
-            mapvisualization
+            mapvisualization,
+            widgetshowtheway
         },
         data () {
             return {
-                parentMsg: ""
+                parentMsg: "",
+                mylat: "",
+                mylng: ""
             }
 
         }
