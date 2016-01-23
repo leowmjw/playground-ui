@@ -11,6 +11,10 @@ import Vue from 'vue'
 import App from './App.vue'
 // import voterSearchBar from './components/voterSearchBar.vue';
 
+// Test out custom directive
+
+// Test out custom filter ..
+
 new Vue({
     el: 'body',
     components: {
@@ -38,5 +42,14 @@ new Vue({
                 dm: true
             }
         }
+    },
+    computed: function() {
+
+    },
+    ready: function() {
+
+    },
+    methods: function() {
+
     }
 })

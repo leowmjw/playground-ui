@@ -20,11 +20,16 @@
 </style>
 
 <template>
-    <voter-search-bar :my-message=parentMsg></voter-search-bar>
+    <voter-search-bar :my-message.sync=parentMsg></voter-search-bar>
     <div class="container-fluid">
+        <!-- Debugginng
+        <div class="row">
+            myMessage is {{ parentMsg }}
+        </div>
+        -->
         <div class="row">
             <navsidebar></navsidebar>
-            <maincontent></maincontent>
+            <maincontent :my-message=parentMsg></maincontent>
         </div>
     </div>
 </template>
@@ -34,6 +39,18 @@
     import navsidebar from './components/navSidebar.vue';
     import maincontent from './components/mainContent.vue';
 
+    // Test out component for Google Maps
+    // https://github.com/GuillaumeLeclerc/vue-google-maps-example
+
+    // Test out components for Leaflet
+    // https://www.npmjs.com/package/vue-leaflet
+
+    // Test out visualization
+    // http://c3js.org/
+
+    // Test out panels
+    // https://github.com/ericmcdaniel/vue-panel
+
     module.exports =
     {
         components: {
@@ -42,7 +59,10 @@
             maincontent
         },
         data () {
-            return {}
+            return {
+                parentMsg: ""
+
+            }
         }
     }
 

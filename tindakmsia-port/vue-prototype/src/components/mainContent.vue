@@ -88,7 +88,7 @@
         <h2 class="sub-header">Section title</h2>
         <div class="table-responsive">
             <div>
-                <input v-model="parentMsg"/><br/>
+                <input v-model="parentMsg" :value="myMessage" /><br/>
             </div>
             <div>
                 <mapvisualization :my-message=parentMsg></mapvisualization>
@@ -243,7 +243,17 @@
     import mapvisualization from './mapVisualization.vue';
     import widgetshowtheway from './widgetShowTheWay.vue';
 
+    // Try out date picker
+    // https://github.com/Bubblings/vue-date-picker
+
+    // Try out Form generation from Popolo
+    // https://github.com/dgerber/vue-formidable
+
+    // Try out tag editor
+    // https://github.com/hnakamur/vue.tag-editor.js
+
     export default {
+        props: ['myMessage'],
         components: {
             mapvisualization,
             widgetshowtheway

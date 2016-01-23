@@ -36,14 +36,16 @@
                             placement="bottom"
                             content="Enter your IC number here; free formed is fine as well filter out non-num!! :)"
                     >
-                        <input type="text" class="form-control" placeholder="Search..." value="{{ msg }}"/>
+                        <input type="text" class="form-control" placeholder="Search..." v-model="msg"
+                               value="{{ msg }}" lazy @blur=recalcMsg
+                        />
                     </tooltip>
                     <tooltip
                             effect="fadein"
                             placement="bottom"
                             content="Press this button .. dammit!"
                     >
-                        <button class="btn btn-default">Search</button>
+                        <button class="btn btn-default" @click.prevent >Search</button>
                     </tooltip>
                 </form>
             </div>
@@ -55,14 +57,36 @@
 
     import { tooltip } from 'vue-strap';
 
+    // Try out the type ahead functionality (looks buggy though!!!)
+    // http://pespantelis.github.io/vue-typeahead/
+
+    const DEFAULT_MSG = 'Hello World!!';
     export default {
         components: {
             tooltip
         },
         props: ['myMessage'],
+        computed: {},
+        ready: function () {
+
+        },
+        methods: {
+            recalcMsg () {
+                console.log("Ho!" + this.msg + " myMessage is " + this.myMessage);
+                if (this.msg == DEFAULT_MSG) {
+                    console.log('No changes!!');
+                }
+                else if (this.msg.length == 0) {
+                    console.log('Empty; not propogating!!')
+                }
+                else {
+                    this.myMessage = this.msg;
+                }
+            }
+        },
         data () {
             return {
-                msg: 'Hello World!!',
+                msg: DEFAULT_MSG,
                 navState: {
                     'collapse': true
                 }
