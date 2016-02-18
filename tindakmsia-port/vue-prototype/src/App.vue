@@ -1,46 +1,25 @@
 <style>
-    /*
-     * Base structure
-     */
-
-    /* Move down content because we have a fixed navbar that is 50px tall */
-    body {
-        padding-top: 50px;
-    }
-
-    /*
-     * Global add-ons
-     */
-
-    .sub-header {
-        padding-bottom: 10px;
-        border-bottom: 1px solid #eee;
-    }
 
 </style>
 
 <template>
-    <voter-search-bar :my-message.sync=parentMsg></voter-search-bar>
-    <div class="container-fluid">
-        <!-- Debugginng
-        <div class="row">
-            myMessage is {{ parentMsg }}
-        </div>
-        -->
-        <div class="row">
-            <navsidebar></navsidebar>
-            <maincontent :my-message=parentMsg></maincontent>
-        </div>
-    </div>
+    <!-- Activate components that you want to play with -->
+    <dashboard></dashboard>
+    <!-- Deactivated, copy to below ..
+    <gmaps></gmaps>
+    -->
 </template>
 
 <script>
-    import voterSearchBar from './components/voterSearchBar.vue';
-    import navsidebar from './components/navSidebar.vue';
-    import maincontent from './components/mainContent.vue';
+    import Dashboard from './components/Dashboard.vue';
+    import GMaps from './components/GMaps.vue';
+
+    // Test out hybrid component for GMaps
+    // https://github.com/hpneo/gmaps
 
     // Test out component for Google Maps
     // https://github.com/GuillaumeLeclerc/vue-google-maps-example
+    // FAILED!  Need to try again :(
 
     // Test out components for Leaflet
     // https://www.npmjs.com/package/vue-leaflet
@@ -51,20 +30,12 @@
     // Test out panels
     // https://github.com/ericmcdaniel/vue-panel
 
-    module.exports =
-    {
+    export default {
         components: {
-            'voter-search-bar': voterSearchBar,
-            navsidebar,
-            maincontent
-        },
-        data () {
-            return {
-                parentMsg: ""
-
-            }
+            dashboard: Dashboard,
+            gmaps: GMaps
         }
-    }
 
+    }
 </script>
 
