@@ -15,7 +15,7 @@ import App from './App.vue'
 
 // Test out custom filter ..
 
-new Vue({
+var vm = new Vue({
     el: 'body',
     components: {
         App

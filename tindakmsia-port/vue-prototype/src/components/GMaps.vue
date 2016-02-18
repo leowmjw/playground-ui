@@ -1,4 +1,5 @@
 <style>
+    /*
     body {
         background: #f3f3f3;
         margin: 0;
@@ -69,10 +70,12 @@
     #header a:hover {
         text-decoration: none;
     }
-
+*/
     .row {
-        margin: 24px 0;
+        margin: 24px;
     }
+
+    /*
 
     .btn {
         color: #fff;
@@ -99,6 +102,7 @@
                 color-stop(1, rgb(68, 119, 170))
         );
     }
+    */
 
     .popin {
         background: #fff;
@@ -107,6 +111,7 @@
         border-radius: 2px;
     }
 
+    /*
     ul.gallery {
         list-style: none;
         margin: 0;
@@ -138,6 +143,7 @@
         margin: 0;
         font-size: 16px;
     }
+*/
 
     #map,
     #panorama {
@@ -145,6 +151,7 @@
         background: #6699cc;
     }
 
+    /*
     #sponsors {
         font-size: 12px;
         text-align: center;
@@ -160,31 +167,116 @@
         font-family: 'Ubuntu Mono', 'Monaco', 'Andale Mono', 'Courier New', monospace;
         font-weight: bold;
     }
+*/
 </style>
 
 <template>
-
-
+    <h3>MapIt Postcode Lookup Example</h3>
+    <div class="row">
+        Lat: {{ location_marker.lat }}<input type="hidden" value="{{ mylat }}" v-model="location_marker.lat"/>
+        Lng: {{ location_marker.lng }}<input type="hidden" value="{{ mylng }}" v-model="location_marker.lng"/><br/>
+        <button @click=initGmaps>initGmaps!</button>
+    </div>
+    <div class="row">
+        <div class="span11">
+            <div class="popin">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
-
+    // Future: Import the google API here; as well as gmaps?  Use the npm?
+    let self;
 
     export default {
-        props: {},
+        props: ['mylat', 'mylng'],
         data () {
             return {
-                map: "",
-                location_marker: {lat: "", lng: ""},
-                polygon_par: "",
-                polygon_dun: "",
-                polygon_are: "",
-                polygon_dm: "",
+                mymap: null,
+                location_marker: {lat: null, lng: null},
+                polygon_par: null,
+                polygon_dun: null,
+                polygon_are: null,
+                polygon_dm: null,
             }
         },
+        ready () {
+            this.initGmaps();
+        },
         methods: {
+            callMe: function () {
+                console.log("CALL ME ... maybe ..")
+            },
             initGmaps: function () {
+                // Terrible hack but it works :P
+                self = this;
+                if (this.mymap === null) {
+                    let initial_lat;
+                    let initial_lng;
 
+                    if (
+                            !(this.mylat === null || this.mylat === undefined)
+                            && !(this.mylng === null || this.mylng === undefined)
+                    ) {
+                        initial_lat = this.mylat;
+                        initial_lng = this.mylng;
+                        console.log("Scenario #1: init process ... Lat is " + initial_lat + " Lng is " + initial_lng)
+
+                        this.mymap = new GMaps({
+                            div: '#map',
+                            lat: initial_lat,
+                            lng: initial_lng,
+                            dragend: function (e) {
+                                let lat = e.getCenter().lat();
+                                let lng = e.getCenter().lng();
+                                console.log("Lat: " + lat + " Lng: " + lng);
+                                self.location_marker.lat = lat
+                                self.location_marker.lng = lng
+                                // self.callMe()
+                            }
+                        });
+
+                        this.mymap.addMarker({
+                            lat: this.mylat,
+                            lng: this.mylng,
+                            title: 'Voter\'s Location',
+                            draggable: true
+                        });
+
+                        this.callMe()
+
+                    } else if (
+                            !(this.location_marker.lat === null || this.location_marker.lat === undefined || this.location_marker.lat === "")
+                            && !(this.location_marker.lng === null || this.location_marker.lng === undefined || this.location_marker.lng === "")
+
+                    ) {
+                        console.log("Scenario #2: init process ... Lat is " + this.location_marker.lat +
+                                " Lng is " + this.location_marker.lng)
+                        this.mymap = new GMaps({
+                            div: '#ecmap',
+                            lat: this.location_marker.lat,
+                            lng: this.location_marker.lng
+                        });
+
+                        this.mymap.addMarker({
+                            lat: this.location_marker.lat,
+                            lng: this.location_marker.lng,
+                            title: 'Voter\'s Location',
+                            draggable: true
+                        });
+
+                    } else {
+                        console.log("Cannot init!")
+                    }
+
+                } else {
+                    console.log("Already init!!")
+                    this.mymap.refresh()
+                }
+
+                // Next time can actual mount multiple maps?
             },
             createAllMarkers: function () {
 
@@ -193,5 +285,6 @@
 
             }
         }
+        // Need a method that runs on load??
     }
 </script>

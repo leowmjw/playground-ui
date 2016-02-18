@@ -4,9 +4,9 @@
 
 <template>
     <!-- Activate components that you want to play with -->
-    <dashboard></dashboard>
+    <gmaps :mylat="-12.043333" :mylng="-77.028333"></gmaps>
     <!-- Deactivated, copy to below ..
-    <gmaps></gmaps>
+    <dashboard></dashboard>
     -->
 </template>
 
