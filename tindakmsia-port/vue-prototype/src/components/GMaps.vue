@@ -187,14 +187,17 @@
 </template>
 
 <script>
+    import Utils from './GMaps/Utils';
+
     // Future: Import the google API here; as well as gmaps?  Use the npm?
     let self;
 
     export default {
         props: ['mylat', 'mylng'],
-        data () {
+        data: function () {
             return {
                 mymap: null,
+                mymarker: null,
                 location_marker: {lat: null, lng: null},
                 polygon_par: null,
                 polygon_dun: null,
@@ -203,6 +206,8 @@
             }
         },
         ready () {
+            // Get User's location; provide default else?
+            // Or maybe mark and have the input boxes be active ..
             this.initGmaps();
         },
         methods: {
@@ -212,40 +217,20 @@
             initGmaps: function () {
                 // Terrible hack but it works :P
                 self = this;
+                // Only do something if it is NOT set ..
                 if (this.mymap === null) {
-                    let initial_lat;
-                    let initial_lng;
+                    // Init ..
+                    let final_lat;
+                    let final_lng;
 
+                    // Figure out which is the lat, lng
                     if (
                             !(this.mylat === null || this.mylat === undefined)
                             && !(this.mylng === null || this.mylng === undefined)
                     ) {
-                        initial_lat = this.mylat;
-                        initial_lng = this.mylng;
-                        console.log("Scenario #1: init process ... Lat is " + initial_lat + " Lng is " + initial_lng)
-
-                        this.mymap = new GMaps({
-                            div: '#map',
-                            lat: initial_lat,
-                            lng: initial_lng,
-                            dragend: function (e) {
-                                let lat = e.getCenter().lat();
-                                let lng = e.getCenter().lng();
-                                console.log("Lat: " + lat + " Lng: " + lng);
-                                self.location_marker.lat = lat
-                                self.location_marker.lng = lng
-                                // self.callMe()
-                            }
-                        });
-
-                        this.mymap.addMarker({
-                            lat: this.mylat,
-                            lng: this.mylng,
-                            title: 'Voter\'s Location',
-                            draggable: true
-                        });
-
-                        this.callMe()
+                        final_lat = this.mylat;
+                        final_lng = this.mylng;
+                        console.log("Scenario #1: init process ... Lat is " + final_lat + " Lng is " + final_lng)
 
                     } else if (
                             !(this.location_marker.lat === null || this.location_marker.lat === undefined || this.location_marker.lat === "")
@@ -254,34 +239,30 @@
                     ) {
                         console.log("Scenario #2: init process ... Lat is " + this.location_marker.lat +
                                 " Lng is " + this.location_marker.lng)
-                        this.mymap = new GMaps({
-                            div: '#ecmap',
-                            lat: this.location_marker.lat,
-                            lng: this.location_marker.lng
-                        });
-
-                        this.mymap.addMarker({
-                            lat: this.location_marker.lat,
-                            lng: this.location_marker.lng,
-                            title: 'Voter\'s Location',
-                            draggable: true
-                        });
-
+                        final_lat = this.location_marker.lat;
+                        final_lng = this.location_marker.lng;
                     } else {
                         console.log("Cannot init!")
                     }
 
-                } else {
-                    console.log("Already init!!")
-                    this.mymap.refresh()
-                }
+                    // OK, now create the Map and Marker ...
+                    this.mymap, this.mymarker = Utils.setupMapMarker(self, final_lat, final_lng)
+                    //this.mymap = Utils.setupMap(self, final_lat, final_lng)
+                    //this.mymarker = Utils.setupMarker(this.mymap, this.location_marker, final_lat, final_lng)
 
-                // Next time can actual mount multiple maps?
+                } else {
+
+                }
             },
+            altGmaps: Utils.createGMaps,
             createAllMarkers: function () {
 
             },
             createAllPolygon: function () {
+                // Create PAR
+                // Create DUN
+                // Create ARE
+                // Create DM
 
             }
         }
