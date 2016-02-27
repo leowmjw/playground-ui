@@ -14,9 +14,10 @@ export default {
     setupMapMarker: function (self, final_lat, final_lng) {
         let mymap;
         let mymarker;
+        console.log("MAPID_INSIDE is " + self.mapid);
 
         mymap = new GMaps({
-            div: '#map',
+            div: '#map-' + self.mapid,
             lat: final_lat,
             lng: final_lng,
             dragend: function (e) {

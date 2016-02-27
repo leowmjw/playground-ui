@@ -99,7 +99,16 @@
 <template>
     <div class="showtheway">
         <template v-if=popup>
+            <div><img
+                    class="showtheway-app-image" alt="Show the Way" title="Show the Way"
+                    src="https://showtheway.io/img/showtheway-app-lg.png"
+                    srcset="https://showtheway.io/img/showtheway-app-lg@2x.png 2x,
+                    https://showtheway.io/img/showtheway-app-lg@3x.png 3x,
+                    https://showtheway.io/img/showtheway-app-lg@4x.png 4x"
+                    style="height: 2em; line-height: normal;"
+            ></div>
             <div class="showtheway-popup-ul">
+
                 <a
                         class="showtheway-a showtheway-google-maps" target="_blank" data-w="1"
                         title="Show the way with Google Maps"
@@ -181,14 +190,14 @@
         </template>
         <template v-else>
             <a class="showtheway-a showtheway-app showtheway-popup" target="_blank" data-w="1" title="Show the Way"
-               href="javascript:;" @click="popup=true" >
-            <img
-                    class="showtheway-app-image" alt="Show the Way" title="Show the Way"
-                    src="https://showtheway.io/img/showtheway-app-lg.png"
-                    srcset="https://showtheway.io/img/showtheway-app-lg@2x.png 2x,
+               href="javascript:;" @click="popup=true">
+                <img
+                        class="showtheway-app-image" alt="Show the Way" title="Show the Way"
+                        src="https://showtheway.io/img/showtheway-app-lg.png"
+                        srcset="https://showtheway.io/img/showtheway-app-lg@2x.png 2x,
                     https://showtheway.io/img/showtheway-app-lg@3x.png 3x,
                     https://showtheway.io/img/showtheway-app-lg@4x.png 4x"
-                    style="height: 2em; line-height: normal;">
+                        style="height: 2em; line-height: normal;">
 
             </a>
         </template>

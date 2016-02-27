@@ -145,7 +145,7 @@
     }
 */
 
-    #map,
+    .map,
     #panorama {
         height: 300px;
         background: #6699cc;
@@ -175,25 +175,43 @@
     <div class="row">
         Lat: {{ location_marker.lat }}<input type="hidden" value="{{ mylat }}" v-model="location_marker.lat"/>
         Lng: {{ location_marker.lng }}<input type="hidden" value="{{ mylng }}" v-model="location_marker.lng"/><br/>
+        <!-- If need to test clicking initGMaps!
         <button @click=initGmaps>initGmaps!</button>
+        -->
+        <!-- Put text box where users can copy over the javascript?? -->
+        <textarea rows="4" cols="50">
+<javascript>\n
+  Copy this below\n
+  Lat: {{ location_marker.lat }} \n
+  Lng: {{ location_marker.lng }} \n
+\n
+</javascript>
+        </textarea><br/>
+        Sample Test ShowtheWay Button:
+        <widgetshowtheway :mylat=location_marker.lat :mylng=location_marker.lng></widgetshowtheway>
     </div>
     <div class="row">
         <div class="span11">
             <div class="popin">
-                <div id="map"></div>
+                <div id="map-{{ mapid }}" class="map"></div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    // Any additional modules/function ..
     import Utils from './GMaps/Utils';
+    // Any components below
+    import widgetshowtheway from './widgetShowTheWay.vue';
 
     // Future: Import the google API here; as well as gmaps?  Use the npm?
     let self;
 
     export default {
-        props: ['mylat', 'mylng'],
+
+        props: ['mylat', 'mylng', 'mapid'],
+        components: {widgetshowtheway},
         data: function () {
             return {
                 mymap: null,
@@ -217,6 +235,8 @@
             initGmaps: function () {
                 // Terrible hack but it works :P
                 self = this;
+                // Check mapid is passed
+                console.log("MAPID is " + self.mapid);
                 // Only do something if it is NOT set ..
                 if (this.mymap === null) {
                     // Init ..
