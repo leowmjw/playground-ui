@@ -5,9 +5,9 @@
 <template>
     <div>
         <!-- Activate components that you want to play with -->
-        <gmaps mylat="-12.043333" mylng="-77.028333" mapid="manju"></gmaps>
-        <!-- 3.07898 101.4677 -->
-        <gmaps mylat="3.07898" mylng="101.4677" mapid="michael"></gmaps>
+        <gmaps mapid="manju"></gmaps>
+        <!-- Lat: 3.0765802072620043 Lng: 101.52400493164055 -->
+        <gmaps mylat="3.07658" mylng="101.5240" mapid="michael"></gmaps>
     </div>
     <!-- Deactivated, copy to below ..
     <dashboard></dashboard>

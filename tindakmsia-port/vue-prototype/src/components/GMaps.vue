@@ -181,10 +181,10 @@
         <!-- Put text box where users can copy over the javascript?? -->
         <textarea rows="4" cols="50">
 <javascript>\n
-  Copy this below\n
-  Lat: {{ location_marker.lat }} \n
-  Lng: {{ location_marker.lng }} \n
-\n
+    Copy this below\n
+    Lat: {{ location_marker.lat }} \n
+    Lng: {{ location_marker.lng }} \n
+    \n
 </javascript>
         </textarea><br/>
         Sample Test ShowtheWay Button:
@@ -224,9 +224,20 @@
             }
         },
         ready () {
-            // Get User's location; provide default else?
-            // Or maybe mark and have the input boxes be active ..
-            this.initGmaps();
+            // If hard coded starting point; no need to look up ..
+            if (
+                    !(this.mylat === null || this.mylat === undefined)
+                    && !(this.mylng === null || this.mylng === undefined)
+            ) {
+                this.initGmaps();
+            }
+            // Only need to call if it is not hard coded already :P
+
+            else {
+                // Get User's location; call initGMaps once data is gathered ..
+                // What about when it fails??
+                Utils.findGeoLocation(this.initGmaps, this.location_marker)
+            }
         },
         methods: {
             callMe: function () {

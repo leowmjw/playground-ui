@@ -99,20 +99,42 @@ export default {
         });
         return mymarker;
     },
-    findGeoLocation () {
-        // Init variables
-        let mylat = null;
-        let mylng = null;
+    refreshGeoLocation (callThisWhenHavePosition, location_marker, mylat = null, mylng = null) {
 
-        // Check if it exists
-
-        // If NOT; or error or not allowed; use a default lat,lng??
-
-        // Get the data fill into the data structure; or maybe return the data structure
-
-        return {
-            current_lat: mylat,
-            current_lng: mylng
+        // Have those graphics to click to reestablish location ...
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                // Get the detail as needed
+                location_marker.lat = position.coords.latitude
+                location_marker.lng = position.coords.longitude
+                console.log("INSIDE: GOT a location! Lat: " + mylat + " Lng: " + mylng)
+                // Since this is async; need to wait until then to pull this off
+                // Maybe better a Promise type or yield solution??
+                // This is tied deeply but OK ler ...
+                if (!(callThisWhenHavePosition === null)) {
+                    callThisWhenHavePosition()
+                }
+            }, function(err) {
+                console.log("ERR: " + err.message + " Using default ..")
+                location_marker.lat = mylat;
+                location_marker.lng = mylng;
+                if (!(callThisWhenHavePosition === null)) {
+                    callThisWhenHavePosition()
+                }
+            })
+        } else {
+            // DO nothing ... just quit with null??
         }
+    },
+    findGeoLocation (callThisWhenHavePosition, location_marker) {
+        // As a further exercise; convert this to a generator type solution with yield
+        // as getCurrentPosition is actually async ... hmmm ...
+        // For now; use the ugly solution
+        // Init variables; default values filled ..
+        let mylat = "3.079";
+        let mylng = "101.468";
+
+        // It will need to handle itself; but passes a default ..
+        this.refreshGeoLocation(callThisWhenHavePosition, location_marker, mylat, mylng);
     }
 }
