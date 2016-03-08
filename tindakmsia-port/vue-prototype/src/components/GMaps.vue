@@ -178,6 +178,9 @@
         <!-- If need to test clicking initGMaps!
         <button @click=initGmaps>initGmaps!</button>
         -->
+        <div>
+            <button @click=createAllPolygon>ALL Polygons!</button>
+        </div>
         <!-- Put text box where users can copy over the javascript?? -->
         <textarea rows="4" cols="50">
 <javascript>\n
@@ -204,6 +207,8 @@
     import Utils from './GMaps/Utils';
     // Any components below
     import widgetshowtheway from './widgetShowTheWay.vue';
+    // Any thing needed for debugging below
+    import util from 'util';
 
     // Future: Import the google API here; as well as gmaps?  Use the npm?
     let self;
@@ -217,10 +222,19 @@
                 mymap: null,
                 mymarker: null,
                 location_marker: {lat: null, lng: null},
-                polygon_par: null,
-                polygon_dun: null,
-                polygon_are: null,
-                polygon_dm: null,
+                mypolygons: {
+                    par: null,
+                    dun: null,
+                    are: null,
+                    dm: null
+                },
+                geojsons: {
+                    par: null,
+                    dun: null,
+                    are: null,
+                    dm: null,
+                    zon: null
+                },
             }
         },
         ready () {
@@ -238,6 +252,9 @@
                 // What about when it fails??
                 Utils.findGeoLocation(this.initGmaps, this.location_marker)
             }
+            // Init all the data from API backend?? Async??
+            // Start with no query; leave that as default null ..
+            Utils.extractPolygon("http://localhost:8080/api", this.geojsons)
         },
         methods: {
             callMe: function () {
@@ -277,7 +294,10 @@
                     }
 
                     // OK, now create the Map and Marker ...
-                    this.mymap, this.mymarker = Utils.setupMapMarker(self, final_lat, final_lng)
+                    let mymapmarker = Utils.setupMapMarker(self, final_lat, final_lng)
+                    this.mymap = mymapmarker.map
+                    this.mymarker = mymapmarker.marker
+                    // console.log("initGMaps " + util.inspect(this.mymap))
                     //this.mymap = Utils.setupMap(self, final_lat, final_lng)
                     //this.mymarker = Utils.setupMarker(this.mymap, this.location_marker, final_lat, final_lng)
 
@@ -290,10 +310,63 @@
 
             },
             createAllPolygon: function () {
+                // DEBUG: Need to use JSON.parse as it is actually string to beecome Object!!
+                /*
+                 console.log("INSIDE createAllPolygon" + typeof(this.geojsons.dm))
+                 let mypaths = [[
+                 [101.60783228433, 3.1357780341625],
+                 [101.60664881278, 3.1337163181438],
+                 [101.59642367101, 3.13517607569],
+                 [101.59648804721, 3.1437188985063],
+                 [101.59745063262, 3.1493284860166],
+                 [101.59923798179, 3.1494915535193],
+                 [101.60158407483, 3.1516742153268],
+                 [101.6034509064, 3.1543874402995],
+                 [101.60489195018, 3.1552577462054],
+                 [101.60732691461, 3.155487459555],
+                 [101.61531661519, 3.1555309115591],
+                 [101.61531557584, 3.1554962658424],
+                 [101.61515920603, 3.1529277896996],
+                 [101.61604266931, 3.1512533673724],
+                 [101.61736469786, 3.1502775229295],
+                 [101.61202696819, 3.1469848169202],
+                 [101.61080953739, 3.1450407921937],
+                 [101.61103925099, 3.1413974736699],
+                 [101.60966999306, 3.1379373415854],
+                 [101.60783228433, 3.1357780341625]
+                 ]];
+                 mypaths = JSON.parse(this.geojsons.dm)
+                 console.log("MYPATHS: " + typeof(mypaths))
+
+                 this.mymap.drawPolygon({
+                 paths: mypaths,
+                 useGeoJSON: true,
+                 strokeColor: '#ED2A40',
+                 strokeOpacity: 1,
+                 strokeWeight: 3,
+                 fillColor: '#F25C6D',
+                 fillOpacity: 0.7
+                 });
+                 */
                 // Create PAR
                 // Create DUN
                 // Create ARE
                 // Create DM
+                // Do we need to check for null value?? or undefined???
+                // Only render if it don;t already exist; what happens when run multiple without the checks?
+                // Dunno?? ..
+                if (!(this.geojsons.dm === undefined || this.geojsons.dm === null)) {
+
+                    this.mypolygons.dm = Utils.renderPolygon(this.mymap, this.geojsons.dm, {
+                        strokeColor: '#ED2A40',
+                        strokeOpacity: 1,
+                        strokeWeight: 3,
+                        fillColor: '#F25C6D',
+                        fillOpacity: 0.7
+                    })
+                } else {
+                    console.log("ERR: Nothing to do with DM!!!")
+                }
 
             }
         }

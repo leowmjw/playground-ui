@@ -5,7 +5,7 @@
 <template>
     <div>
         <!-- Activate components that you want to play with -->
-        <gmaps mapid="manju"></gmaps>
+        <gmaps mylat="3.1443" mylng="101.6057" mapid="manju"></gmaps>
         <!-- Lat: 3.0765802072620043 Lng: 101.52400493164055 -->
         <gmaps mylat="3.07658" mylng="101.5240" mapid="michael"></gmaps>
     </div>

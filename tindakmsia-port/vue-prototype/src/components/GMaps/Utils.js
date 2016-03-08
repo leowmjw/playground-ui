@@ -4,6 +4,7 @@
 // Generic Utils library for use by the GMaps component??
 
 let util = require('util');
+let req = require('superagent')
 
 function bob() {
     console.log("I am in BOB!!!")
@@ -114,7 +115,7 @@ export default {
                 if (!(callThisWhenHavePosition === null)) {
                     callThisWhenHavePosition()
                 }
-            }, function(err) {
+            }, function (err) {
                 console.log("ERR: " + err.message + " Using default ..")
                 location_marker.lat = mylat;
                 location_marker.lng = mylng;
@@ -136,5 +137,73 @@ export default {
 
         // It will need to handle itself; but passes a default ..
         this.refreshGeoLocation(callThisWhenHavePosition, location_marker, mylat, mylng);
+    },
+    extractPolygon (api_url, geojsons, query = null) {
+        // Call to back end; synchronous for now ..
+        // Need to pass in some kind of inputs; and setup the fence to be triggered when it is exceeded
+        console.log("Inside extractPolygon!")
+        req.get(api_url)
+            .end((err, res) => {
+
+                // util.inspect(res.txt, { colors: true })
+                if (err || !res.ok) {
+                    console.log('Oh no! error MSG: ' + err.message);
+                    console.log(util.inspect(res))
+                } else {
+                    // Alternative
+                    // console.log("STRINGIFY: " + JSON.stringify(res.text))
+                    /*
+                     util.inspect(
+                     JSON.parse(res.text),
+                     {
+                     colors: true
+                     })
+                     */
+                    let geojsons_map = JSON.parse(res.text)
+                    // DEBUG:
+                    // console.log(util.inspect(geojsons_map) )
+
+                    /*
+                     console.log("PAR" + geojsons_map["par"])
+                     console.log("DUN" + geojsons_map["dun"])
+                     console.log("ARE" + geojsons_map["are"])
+                     console.log("DM" + geojsons_map["dm"])
+                     console.log("ZON" + geojsons_map["zon"])
+                     */
+                    // geojsons = Array.from(geojsons_map);
+
+                    geojsons.par = geojsons_map["par"];
+                    geojsons.dun = geojsons_map["dun"];
+                    geojsons.are = geojsons_map["are"];
+                    geojsons.dm = geojsons_map["dm"];
+
+                    // DEBUG:
+                    /*
+                     console.log(
+                     util.inspect(JSON.parse(geojsons.dm))
+                     )
+                     */
+                    // console.log("DM is of type " + typeof(geojsons.dm) + geojsons.dm)
+                    // Async; so no return type :(
+                    // callThisWhenHavePolygons()
+                    /*
+                     for (let k of Object.keys(myjson)) {
+                     console.log("Item key " + k + " is " + myjson[k])
+                     }
+                     */
+                }
+            })
+        // What happens when just the whole object is replaced; does it still become reactive??
+    },
+    renderPolygon (mymap, polygon_geojson, options) {
+        // Attach; should the older one be removed first??
+        // What would happen when it is replaced??
+        // options are like the color; the opacity??
+        let new_polygon_properties = Object.assign({
+            paths: JSON.parse(polygon_geojson),
+            useGeoJSON: true
+        }, options)
+        return mymap.drawPolygon(new_polygon_properties)
+
     }
 }
