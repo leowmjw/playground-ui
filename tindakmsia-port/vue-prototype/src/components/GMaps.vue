@@ -226,7 +226,8 @@
                     par: null,
                     dun: null,
                     are: null,
-                    dm: null
+                    dm: null,
+                    zon: null
                 },
                 geojsons: {
                     par: null,
@@ -234,6 +235,13 @@
                     are: null,
                     dm: null,
                     zon: null
+                },
+                myinfo: {
+                    par: {details: "PAR: P107", selected: false},
+                    dun: {details: "DUN: N40", selected: false},
+                    are: {details: "ARE: PJ", selected: false},
+                    dm: {details: "DM: 107/40/15", selected: false},
+                    zon: {details: "ZON: 1", selected: false}
                 },
             }
         },
@@ -348,13 +356,59 @@
                  fillOpacity: 0.7
                  });
                  */
+                let mapit_url_called = "http://localhost:8080/api?myaction=location&lat="
+                        + this.location_marker.lat + "&lng=" + this.location_marker.lng
+                console.log("MAPIT URL: " + mapit_url_called)
+                console.log("DM Polygon BEFORE:" + this.geojsons.dm)
+                // Get the data now ...
+                Utils.extractPolygon(
+                        mapit_url_called, this.geojsons
+                )
+                console.log("DM Polygon AFTER:" + this.geojsons.dm)
+
                 // Create PAR
+                if (!(this.geojsons.par === undefined || this.geojsons.par === null)) {
+
+                    this.mypolygons.par = Utils.renderPolygon(this.mymap, this.geojsons.par, {
+                        strokeColor: '#BBD8E9',
+                        strokeOpacity: 1,
+                        strokeWeight: 3,
+                        fillColor: '#BBD8E9',
+                        fillOpacity: 0.5
+                    })
+                } else {
+                    console.log("ERR: Nothing to do with PAR!!!")
+                }
                 // Create DUN
+                if (!(this.geojsons.dun === undefined || this.geojsons.dun === null)) {
+
+                    this.mypolygons.dun = Utils.renderPolygon(this.mymap, this.geojsons.dun, {
+                        strokeColor: '#FFD8E9',
+                        strokeOpacity: 1,
+                        strokeWeight: 3,
+                        fillColor: '#FFD8E9',
+                        fillOpacity: 0.6
+                    })
+                } else {
+                    console.log("ERR: Nothing to do with ARE!!!")
+                }
+
                 // Create ARE
-                // Create DM
+                if (!(this.geojsons.are === undefined || this.geojsons.are === null)) {
+
+                    this.mypolygons.are = Utils.renderPolygon(this.mymap, this.geojsons.are, {
+                        strokeColor: '#ABBB17',
+                        strokeOpacity: 1,
+                        strokeWeight: 3,
+                        fillColor: '#F3F756',
+                        fillOpacity: 0.4
+                    })
+                } else {
+                    console.log("ERR: Nothing to do with ARE!!!")
+                }
                 // Do we need to check for null value?? or undefined???
                 // Only render if it don;t already exist; what happens when run multiple without the checks?
-                // Dunno?? ..
+                // Create DM
                 if (!(this.geojsons.dm === undefined || this.geojsons.dm === null)) {
 
                     this.mypolygons.dm = Utils.renderPolygon(this.mymap, this.geojsons.dm, {

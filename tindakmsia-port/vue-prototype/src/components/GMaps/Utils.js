@@ -172,10 +172,12 @@ export default {
                      */
                     // geojsons = Array.from(geojsons_map);
 
-                    geojsons.par = geojsons_map["par"];
-                    geojsons.dun = geojsons_map["dun"];
-                    geojsons.are = geojsons_map["are"];
-                    geojsons.dm = geojsons_map["dm"];
+                    geojsons.par = geojsons_map["par"].length ? geojsons_map["par"] : null;
+                    geojsons.dun = geojsons_map["dun"].length ? geojsons_map["dun"] : null;
+                    // DEBUG:
+                    // console.log("ARE size: " + geojsons_map["are"].length)
+                    geojsons.are = geojsons_map["are"].length ? geojsons_map["are"] : null;
+                    geojsons.dm = geojsons_map["dm"].length ? geojsons_map["dm"] : null;
 
                     // DEBUG:
                     /*
