@@ -178,9 +178,6 @@
         <!-- If need to test clicking initGMaps!
         <button @click=initGmaps>initGmaps!</button>
         -->
-        <div>
-            <button @click=createAllPolygon>ALL Polygons!</button>
-        </div>
         <!-- Put text box where users can copy over the javascript?? -->
         <textarea rows="4" cols="50">
 <javascript>\n
@@ -194,6 +191,9 @@
         <widgetshowtheway :mylat=location_marker.lat :mylng=location_marker.lng></widgetshowtheway>
     </div>
     <div class="row">
+        <div>
+            <button @click=createAllPolygon>ALL Polygons!</button>
+        </div>
         <div class="span11">
             <div class="popin">
                 <div id="map-{{ mapid }}" class="map"></div>
@@ -246,6 +246,8 @@
             }
         },
         ready () {
+            // Terrible hack but it works :P
+            self = this;
             // If hard coded starting point; no need to look up ..
             if (
                     !(this.mylat === null || this.mylat === undefined)
@@ -262,15 +264,13 @@
             }
             // Init all the data from API backend?? Async??
             // Start with no query; leave that as default null ..
-            Utils.extractPolygon("http://localhost:8080/api", this.geojsons)
+            // Utils.extractPolygon(self, "http://localhost:8080/api", this.geojsons)
         },
         methods: {
             callMe: function () {
-                console.log("CALL ME ... maybe ..")
+                console.log("CALLME --> LAT: " + this.location_marker.lat + " LNG: " + this.location_marker.lng)
             },
             initGmaps: function () {
-                // Terrible hack but it works :P
-                self = this;
                 // Check mapid is passed
                 console.log("MAPID is " + self.mapid);
                 // Only do something if it is NOT set ..
@@ -286,15 +286,15 @@
                     ) {
                         final_lat = this.mylat;
                         final_lng = this.mylng;
-                        console.log("Scenario #1: init process ... Lat is " + final_lat + " Lng is " + final_lng)
+                        // console.log("Scenario #1: init process ... Lat is " + final_lat + " Lng is " + final_lng)
 
                     } else if (
                             !(this.location_marker.lat === null || this.location_marker.lat === undefined || this.location_marker.lat === "")
                             && !(this.location_marker.lng === null || this.location_marker.lng === undefined || this.location_marker.lng === "")
 
                     ) {
-                        console.log("Scenario #2: init process ... Lat is " + this.location_marker.lat +
-                                " Lng is " + this.location_marker.lng)
+                        // console.log("Scenario #2: init process ... Lat is " + this.location_marker.lat +
+                        //        " Lng is " + this.location_marker.lng)
                         final_lat = this.location_marker.lat;
                         final_lng = this.location_marker.lng;
                     } else {
@@ -362,65 +362,8 @@
                 console.log("DM Polygon BEFORE:" + this.geojsons.dm)
                 // Get the data now ...
                 Utils.extractPolygon(
-                        mapit_url_called, this.geojsons
+                        self, mapit_url_called, this.geojsons
                 )
-                console.log("DM Polygon AFTER:" + this.geojsons.dm)
-
-                // Create PAR
-                if (!(this.geojsons.par === undefined || this.geojsons.par === null)) {
-
-                    this.mypolygons.par = Utils.renderPolygon(this.mymap, this.geojsons.par, {
-                        strokeColor: '#BBD8E9',
-                        strokeOpacity: 1,
-                        strokeWeight: 3,
-                        fillColor: '#BBD8E9',
-                        fillOpacity: 0.5
-                    })
-                } else {
-                    console.log("ERR: Nothing to do with PAR!!!")
-                }
-                // Create DUN
-                if (!(this.geojsons.dun === undefined || this.geojsons.dun === null)) {
-
-                    this.mypolygons.dun = Utils.renderPolygon(this.mymap, this.geojsons.dun, {
-                        strokeColor: '#FFD8E9',
-                        strokeOpacity: 1,
-                        strokeWeight: 3,
-                        fillColor: '#FFD8E9',
-                        fillOpacity: 0.6
-                    })
-                } else {
-                    console.log("ERR: Nothing to do with ARE!!!")
-                }
-
-                // Create ARE
-                if (!(this.geojsons.are === undefined || this.geojsons.are === null)) {
-
-                    this.mypolygons.are = Utils.renderPolygon(this.mymap, this.geojsons.are, {
-                        strokeColor: '#ABBB17',
-                        strokeOpacity: 1,
-                        strokeWeight: 3,
-                        fillColor: '#F3F756',
-                        fillOpacity: 0.4
-                    })
-                } else {
-                    console.log("ERR: Nothing to do with ARE!!!")
-                }
-                // Do we need to check for null value?? or undefined???
-                // Only render if it don;t already exist; what happens when run multiple without the checks?
-                // Create DM
-                if (!(this.geojsons.dm === undefined || this.geojsons.dm === null)) {
-
-                    this.mypolygons.dm = Utils.renderPolygon(this.mymap, this.geojsons.dm, {
-                        strokeColor: '#ED2A40',
-                        strokeOpacity: 1,
-                        strokeWeight: 3,
-                        fillColor: '#F25C6D',
-                        fillOpacity: 0.7
-                    })
-                } else {
-                    console.log("ERR: Nothing to do with DM!!!")
-                }
 
             }
         }

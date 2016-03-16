@@ -24,7 +24,7 @@ export default {
             dragend: function (e) {
                 let lat = e.getCenter().lat();
                 let lng = e.getCenter().lng();
-                console.log("Lat: " + lat + " Lng: " + lng);
+                console.log("DRAGEND --> Lat: " + lat + " Lng: " + lng);
                 self.location_marker.lat = lat
                 self.location_marker.lng = lng
                 self.callMe()
@@ -108,7 +108,7 @@ export default {
                 // Get the detail as needed
                 location_marker.lat = position.coords.latitude
                 location_marker.lng = position.coords.longitude
-                console.log("INSIDE: GOT a location! Lat: " + mylat + " Lng: " + mylng)
+                // console.log("INSIDE: GOT a location! Lat: " + mylat + " Lng: " + mylng)
                 // Since this is async; need to wait until then to pull this off
                 // Maybe better a Promise type or yield solution??
                 // This is tied deeply but OK ler ...
@@ -138,10 +138,10 @@ export default {
         // It will need to handle itself; but passes a default ..
         this.refreshGeoLocation(callThisWhenHavePosition, location_marker, mylat, mylng);
     },
-    extractPolygon (api_url, geojsons, query = null) {
+    extractPolygon (self, api_url, geojsons, query = null) {
         // Call to back end; synchronous for now ..
         // Need to pass in some kind of inputs; and setup the fence to be triggered when it is exceeded
-        console.log("Inside extractPolygon!")
+        console.log("Inside extractPolygon! Calling URL " + api_url)
         req.get(api_url)
             .end((err, res) => {
 
@@ -172,19 +172,19 @@ export default {
                      */
                     // geojsons = Array.from(geojsons_map);
 
-                    geojsons.par = geojsons_map["par"].length ? geojsons_map["par"] : null;
-                    geojsons.dun = geojsons_map["dun"].length ? geojsons_map["dun"] : null;
+                    self.geojsons.par = geojsons_map["par"].length ? geojsons_map["par"] : null;
+                    self.geojsons.dun = geojsons_map["dun"].length ? geojsons_map["dun"] : null;
                     // DEBUG:
                     // console.log("ARE size: " + geojsons_map["are"].length)
-                    geojsons.are = geojsons_map["are"].length ? geojsons_map["are"] : null;
-                    geojsons.dm = geojsons_map["dm"].length ? geojsons_map["dm"] : null;
+                    self.geojsons.are = geojsons_map["are"].length ? geojsons_map["are"] : null;
+                    self.geojsons.dm = geojsons_map["dm"].length ? geojsons_map["dm"] : null;
 
                     // DEBUG:
-                    /*
-                     console.log(
-                     util.inspect(JSON.parse(geojsons.dm))
-                     )
-                     */
+
+                    console.log("API RES:" +
+                        util.inspect(JSON.parse(self.geojsons.dm))
+                    )
+
                     // console.log("DM is of type " + typeof(geojsons.dm) + geojsons.dm)
                     // Async; so no return type :(
                     // callThisWhenHavePolygons()
@@ -193,6 +193,63 @@ export default {
                      console.log("Item key " + k + " is " + myjson[k])
                      }
                      */
+                    console.log("DM Polygon AFTER:" + self.geojsons.dm)
+
+                    // Create PAR
+                    if (!(self.geojsons.par === undefined || self.geojsons.par === null)) {
+
+                        self.mypolygons.par = this.renderPolygon(self.mymap, self.geojsons.par, {
+                            strokeColor: '#BBD8E9',
+                            strokeOpacity: 1,
+                            strokeWeight: 3,
+                            fillColor: '#BBD8E9',
+                            fillOpacity: 0.5
+                        })
+                    } else {
+                        console.log("ERR: Nothing to do with PAR!!!")
+                    }
+                    // Create DUN
+                    if (!(self.geojsons.dun === undefined || self.geojsons.dun === null)) {
+
+                        self.mypolygons.dun = this.renderPolygon(self.mymap, self.geojsons.dun, {
+                            strokeColor: '#FFD8E9',
+                            strokeOpacity: 1,
+                            strokeWeight: 3,
+                            fillColor: '#FFD8E9',
+                            fillOpacity: 0.6
+                        })
+                    } else {
+                        console.log("ERR: Nothing to do with ARE!!!")
+                    }
+
+                    // Create ARE
+                    if (!(self.geojsons.are === undefined || self.geojsons.are === null)) {
+
+                        self.mypolygons.are = this.renderPolygon(self.mymap, self.geojsons.are, {
+                            strokeColor: '#ABBB17',
+                            strokeOpacity: 1,
+                            strokeWeight: 3,
+                            fillColor: '#F3F756',
+                            fillOpacity: 0.4
+                        })
+                    } else {
+                        console.log("ERR: Nothing to do with ARE!!!")
+                    }
+                    // Do we need to check for null value?? or undefined???
+                    // Only render if it don;t already exist; what happens when run multiple without the checks?
+                    // Create DM
+                    if (!(self.geojsons.dm === undefined || self.geojsons.dm === null)) {
+
+                        self.mypolygons.dm = this.renderPolygon(self.mymap, self.geojsons.dm, {
+                            strokeColor: '#ED2A40',
+                            strokeOpacity: 1,
+                            strokeWeight: 3,
+                            fillColor: '#F25C6D',
+                            fillOpacity: 0.7
+                        })
+                    } else {
+                        console.log("ERR: Nothing to do with DM!!!")
+                    }
                 }
             })
         // What happens when just the whole object is replaced; does it still become reactive??
