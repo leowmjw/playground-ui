@@ -25,6 +25,14 @@
         </div>
         <!-- /.row -->
 
+        <div class="row">
+            <div class="col-md-6 portfolio-item">
+                <popit mytype="membership" pnum="ARANGODB"></popit>
+            </div>
+            <div class="col-md-6 portfolio-item">
+                <popit></popit>
+            </div>
+        </div>
         <!-- Projects Row -->
         <div class="row">
             <div class="col-md-6 portfolio-item">
