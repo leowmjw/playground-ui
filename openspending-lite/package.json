@@ -8,6 +8,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "arangojs": "^4.3.0",
     "vue": "^1.0.0"
   },
   "devDependencies": {
