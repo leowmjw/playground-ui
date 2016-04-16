@@ -24,8 +24,6 @@
 
     let util = require('util');
 
-    let self
-
     export default  {
         props: ['mytype', 'pnum'],
         components: {},
@@ -33,12 +31,10 @@
             return {
                 // type: person, post, organization, membership
                 type: "person",
-                result: null
+                result: "BOB"
             }
         },
         ready () {
-
-            self = this
 
             if (this.mytype != null && this.mytype != undefined) {
                 this.type = this.mytype
@@ -49,7 +45,7 @@
             if (this.pnum == "ARANGODB") {
                 // this.result = JSON.stringify(Model.getPostsByStates(['Selangor']))
                 //  console.log(this.result)
-                Model.getPostsByStates(self, ['Selangor'])
+                Model.getPostsByStates.call(this, ['Selangor'])
                 // self.result = JSON.stringify({ bob: "ccco"})
             }
         },

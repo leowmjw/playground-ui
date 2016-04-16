@@ -21,7 +21,7 @@ module.exports = {
     queryCursorArangoRepo: function (aql_query, options) {
         // Returns cursor .. Promise for future use?
     },
-    getPostsByStates: function (self, array_states) {
+    getPostsByStates: function (array_states) {
         console.log("PARAMS: ", array_states)
         array_states = ['selangor', 'perak']
 
@@ -48,7 +48,8 @@ module.exports = {
         // console.log("ITE", myit.next(aql_query))
         // console.log("ITE", myit.next(aql_query))
 
-        _queryAllArangoRepo(self, aql_query, { count:true })
+        console.log("Before arango call", this.request)
+        _queryAllArangoRepo.call(this, aql_query, { count:true })
         // Parallel Old, New?
         // return myresult
     }
@@ -60,7 +61,7 @@ function *getAll(aql_query) {
     return
 }
 
-function _queryAllArangoRepo(self, aql_query, options) {
+function _queryAllArangoRepo(aql_query, options) {
     // Returns array
     db.query(aql_query, options).then(
         cursor => {
@@ -74,7 +75,7 @@ function _queryAllArangoRepo(self, aql_query, options) {
     ).then(
         value => {
             // console.log("Got back from ARANGODB: ", util.inspect(value))
-            self.result =  JSON.stringify(value)
+            this.result =  JSON.stringify(value)
         },
         err => {
             console.error("ERR: ", err)
