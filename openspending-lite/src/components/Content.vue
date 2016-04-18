@@ -25,6 +25,12 @@
         </div>
         <!-- /.row -->
 
+        <!-- Projects Row -->
+        <div class="row">
+            <mpsearch></mpsearch>
+        </div>
+        <!-- /.row -->
+
         <div class="row">
             <div class="col-md-6 portfolio-item">
                 <popit mytype="membership" pnum="ARANGODB"></popit>
@@ -33,30 +39,6 @@
                 <popit></popit>
             </div>
         </div>
-        <!-- Projects Row -->
-        <div class="row">
-            <div class="col-md-6 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project One</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida
-                    pellentesque urna varius vitae.</p>
-            </div>
-            <div class="col-md-6 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project Two</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida
-                    pellentesque urna varius vitae.</p>
-            </div>
-        </div>
-        <!-- /.row -->
 
         <!-- Projects Row -->
         <div class="row">
@@ -175,10 +157,13 @@
 <script>
 
     import PopIt from './PopIt.vue'
+    import MPSearch from './MPSearch.vue'
+
 
     export default {
         components: {
-            popit: PopIt
+            popit: PopIt,
+            mpsearch: MPSearch
         },
         data () {
             return {
