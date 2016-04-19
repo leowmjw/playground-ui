@@ -10,6 +10,6 @@ module.exports = {
         user: "",
         password: "",
         name: "sinar",
-        debug: false
+        debug: true
     }
 }

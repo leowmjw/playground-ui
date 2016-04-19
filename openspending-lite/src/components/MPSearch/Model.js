@@ -45,6 +45,11 @@ function _queryAllArangoRepo(aql_query, options) {
     )
 }
 
+function _promiseQueryAllArangoRepo(aql_query, options) {
+
+    return db.query(aql_query, options)
+
+}
 
 module.exports = {
     search: function (keyword) {
@@ -54,10 +59,35 @@ module.exports = {
 
         // console.log("Input is ", util.inspect(keyword))
         // Trim the keyword so can match anything ...
-        keyword = keyword.trim()
+        keyword = keyword.trim().toLowerCase()
         let aql_query = `
         FOR mp in current_mps
             FILTER LIKE(mp.myname.search, "%${keyword}%")
+            RETURN {
+                name: mp.myname.data.name,
+                image: mp.myname.data.image,
+                label: mp.mypost.data.label,
+                org: mp.myorg.data.name,
+                area: mp.myarea
+            }
+        `
+
+        // console.log(util.inspect(aql_query))
+        _queryAllArangoRepo.call(this, aql_query, {}, {count: true})
+
+    },
+    searchArea: function (keyword) {
+        // Search for area ID
+
+        // Search
+
+        // Categorize them
+
+        // Use Promise all ??
+        keyword = keyword.trim().toLowerCase()
+        let aql_query = `
+        FOR mp in current_mps
+            FILTER LIKE(LOWER(mp.myarea.id), "%${keyword}%") || LIKE(LOWER(mp.myarea.name), "%${keyword}%")
             RETURN {
                 name: mp.myname.data.name,
                 image: mp.myname.data.image,

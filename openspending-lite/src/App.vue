@@ -14,12 +14,23 @@
                */
     }
 
+    .gmsg {
+        z-index: 1100;
+        position: absolute;
+        top: 0;
+        background-color: red;
+        opacity: 20;
+    }
+
 </style>
 
 <template>
     <div id="app">
+        <div class="has-error gmsg" v-if="gmsg">
+            <h2>{{ gmsg }}</h2>
+        </div>
         <navigation></navigation>
-        <content></content>
+        <content :gmsg.sync="gmsg"></content>
     </div>
 </template>
 
@@ -36,15 +47,15 @@
         },
         data () {
             return {
-
+                gmsg: ""
             }
         },
         ready () {
+            console.log("Ready dandy", this.gmsg)
+            // this.gmsg = "Nu Booties"
 
         },
-        methods: {
-
-        }
+        methods: {}
     }
 
 </script>

@@ -17,27 +17,53 @@
 <template>
     <!-- Search -->
     <div class="col-md-6">
-        <div class="col-md-6 placeholder">
+        <div class="placeholder">
             <input type="text" v-model="keyword"
                    @keyup="searchByKeyword | debounce 300"
-                   placeholder="Search Name ..."
-                   >
+                   placeholder="Search Name (Tony, Aziz)"
+            >
         </div>
-        <div class="col-md-6 placeholder" v-for="item in result">
-            <img src="{{ item.image.toString() }}"
+        <div class="placeholder">
+            <h3>DEBUG: Turn off in config.js</h3>
+            {{ debugresult }}
+        </div>
+        <div class="placeholder" v-for="item in result">
+            <img :src="item.image ? item.image.toString() :
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Replace_this_image_female.svg/150px-Replace_this_image_female.svg.png'"
                  width="100" height="auto"
-                 class="img-thumbnail" alt="Generic placeholder thumbnail">
-            <h4>{{ item.name.toString() }}</h4>
+                 class="img-thumbnail" alt="{{ item.area.id ? item.area.id.toString() : '' }}">
+            <h4>{{ item.name ? item.name.toString() : '' }}</h4>
             <span class="text-muted">
-                {{ item.area.id.toString() }}:
-                {{ item.label.toString() }},
-                {{ item.area.state.toString() }}
+                {{ item.area.id ? item.area.id.toString() : '' }}:
+                {{ item.label ? item.label.toString() : '' }},
+                {{ item.area.state ? item.area.state.toString() : '' }}
             </span>
+            <button @click="filterByArea(item.area.id ? item.area.id.toString() : '')">Filter Area</button>
         </div>
     </div>
     <div class="col-md-6 placeholder">
-        Searching? {{ msg }}
-        <div>{{ debugresult }}</div>
+        <div class="placeholder">
+            <input type="text" v-model="state.keyword"
+                   @keyup="searchAreaByKeyword | debounce 300"
+                   placeholder="Search Area (P001, Serdang) .."
+            >
+        </div>
+        <div class="placeholder">
+            <h3>DEBUG: Turn off in config.js</h3>
+            {{ state.debugresult }}
+        </div>
+        <div class="placeholder" v-for="item in state.result">
+            <img :src="item.image ? item.image.toString() :
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Replace_this_image_female.svg/150px-Replace_this_image_female.svg.png'"
+                 width="100" height="auto"
+                 class="img-thumbnail" alt="{{ item.area.id ? item.area.id.toString() : '' }}">
+            <h4>{{ item.name ? item.name.toString() : '' }}</h4>
+            <span class="text-muted">
+                {{ item.area.id ? item.area.id.toString() : '' }}:
+                {{ item.label ? item.label.toString() : '' }},
+                {{ item.area.state ? item.area.state.toString() : ''  }}
+            </span>
+        </div>
     </div>
     <!-- Debounce -->
 
@@ -58,7 +84,12 @@
                 msg: null,
                 keyword: null,
                 result: null,
-                debugresult: null
+                debugresult: null,
+                state: {
+                    keyword: null,
+                    result: null,
+                    debugresult: null
+                }
             }
         },
         ready () {
@@ -72,8 +103,24 @@
                 this.msg = "Found result for " + this.keyword
 
                 Model.search.call(this, this.keyword)
+                // Model.searchMultiple.call(this, this.keyword)
             },
-            debugObject: function(myObj) {
+            searchAreaByKeyword: function () {
+                this.msg = "Found Area result for " + this.state.keyword
+
+                Model.searchArea.call(this.state, this.state.keyword)
+
+            },
+            filterByArea: function (area_id) {
+                area_id = area_id.trim()
+                if (area_id == null || area_id == undefined || area_id == '') {
+                    console.error("Nothing to do ..")
+                } else {
+                    this.state.keyword = area_id
+                    this.searchAreaByKeyword()
+                }
+            },
+            debugObject: function (myObj) {
                 // return myObj.values()
                 return util.inspect(myObj)
             }

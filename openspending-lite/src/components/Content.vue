@@ -19,7 +19,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">{{ msg }}
-                    <small>Secondary Text</small>
+                    <small>{{ gmsg }}</small>
+                    <button @click.end="updateGmsg">Press Me!!</button>
                 </h1>
             </div>
         </div>
@@ -161,6 +162,7 @@
 
 
     export default {
+        props: ['gmsg'],
         components: {
             popit: PopIt,
             mpsearch: MPSearch
@@ -172,6 +174,14 @@
                 // preserves its current state and we are modifying
                 // its initial state.
                 msg: 'OPenSpending Lite .. ole!'
+            }
+        },
+        ready () {
+            this.gmsg = null
+        },
+        methods: {
+            updateGmsg: function () {
+                this.gmsg = "Press me!!"
             }
         }
     }
