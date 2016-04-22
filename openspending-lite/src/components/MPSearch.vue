@@ -63,6 +63,7 @@
                 {{ item.label ? item.label.toString() : '' }},
                 {{ item.area.state ? item.area.state.toString() : ''  }}
             </span>
+            <button @click="showAreaMap(item.area.id ? item.area.id.toString() : '')">Show Area Map</button>
         </div>
     </div>
     <!-- Debounce -->
@@ -76,7 +77,7 @@
     let util = require('util')
 
     export default {
-        props: [],
+        props: ['searcharea'],
         components: {},
         data () {
             return {
@@ -116,8 +117,17 @@
                 if (area_id == null || area_id == undefined || area_id == '') {
                     console.error("Nothing to do ..")
                 } else {
+                    this.searcharea = area_id
                     this.state.keyword = area_id
                     this.searchAreaByKeyword()
+                }
+            },
+            showAreaMap: function(area_id) {
+                area_id = area_id.trim()
+                if (area_id == null || area_id == undefined || area_id == '') {
+                    console.error("Nothing to do ..")
+                } else {
+                    this.searcharea = area_id
                 }
             },
             debugObject: function (myObj) {

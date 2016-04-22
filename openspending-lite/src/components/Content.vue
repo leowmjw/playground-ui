@@ -20,7 +20,7 @@
             <div class="col-lg-12">
                 <h1 class="page-header">{{ msg }}
                     <small>{{ gmsg }}</small>
-                    <button @click.end="updateGmsg">Press Me!!</button>
+                    <button @click.stop.prevent="updateGmsg">Press Me!!</button>
                 </h1>
             </div>
         </div>
@@ -28,9 +28,23 @@
 
         <!-- Projects Row -->
         <div class="row">
-            <mpsearch></mpsearch>
+            <mpsearch :searcharea.sync="searcharea"></mpsearch>
         </div>
         <!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-10 portfolio-item">
+                <gmaps :searcharea="searcharea" mapid="par"></gmaps>
+            </div>
+            <div class="col-md-5 portfolio-item">
+                <gmaps mylat="3.07658" mylng="101.5240" mapid="michael"></gmaps>
+            </div>
+            <!--
+            <div class="col-md-3 portfolio-item">
+                <gmaps :searcharea="searcharea" mapid="dm"></gmaps>
+            </div>
+            -->
+        </div>
 
         <div class="row">
             <div class="col-md-6 portfolio-item">
@@ -159,13 +173,15 @@
 
     import PopIt from './PopIt.vue'
     import MPSearch from './MPSearch.vue'
+    import GMaps from './GMaps.vue'
 
 
     export default {
         props: ['gmsg'],
         components: {
             popit: PopIt,
-            mpsearch: MPSearch
+            mpsearch: MPSearch,
+            gmaps: GMaps
         },
         data () {
             return {
@@ -173,7 +189,8 @@
                 // with hot-reload because the reloaded component
                 // preserves its current state and we are modifying
                 // its initial state.
-                msg: 'OPenSpending Lite .. ole!'
+                msg: 'OPenSpending Lite .. ole!',
+                searcharea: null,
             }
         },
         ready () {

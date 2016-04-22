@@ -85,6 +85,7 @@ module.exports = {
 
         // Use Promise all ??
         keyword = keyword.trim().toLowerCase()
+        // Here can be the more details one etc ..
         let aql_query = `
         FOR mp in current_mps
             FILTER LIKE(LOWER(mp.myarea.id), "%${keyword}%") || LIKE(LOWER(mp.myarea.name), "%${keyword}%")
