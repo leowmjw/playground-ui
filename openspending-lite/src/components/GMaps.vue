@@ -54,6 +54,7 @@
 
     let util = require('util')
     let Utils = require('./GMaps/Utils.js')
+    let Model = require('./GMaps/Model.js')
 
     import ShowTheWay from './ShowTheWay.vue'
 
@@ -80,7 +81,8 @@
                     are: null,
                     dm: null,
                     zon: null
-                }
+                },
+                arangodb: null
             }
         },
         ready () {
@@ -99,6 +101,9 @@
                 // What about when it fails??
                 Utils.findGeoLocation.call(this)
             }
+
+            // FInished testing ..
+            // Model.testResolvePromise()
         },
         methods: {
             displayAreaByID: function () {
