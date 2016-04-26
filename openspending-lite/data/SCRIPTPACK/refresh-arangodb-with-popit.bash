@@ -8,16 +8,17 @@ echo "Sinar Project Refesh ArangoDB with PopIt Data!!"
 mycat=$1
 # DEBUG:
 # echo "Category is $mycat"
+MYDATADIR=`pwd`
 
 if [ "${mycat}X" == "X" ]
     then
-    echo "ERROR"
+    echo "ERROR: Please use 'refresh-arangodb-with-popit <n>' where <n> IS ALL or <specific>: POSTS, ORGANIZATIONS, MEMBERSHIPS, PERSONS"
 elif [ "${mycat}X" == "ALLX" ]
     then
     # Trubcate DB first .. :P
-    arangosh --javascript.execute ./ARANGOJS/truncate-arangos.js
+    arangosh --javascript.execute ${MYDATADIR}/ARANGOJS/truncate-arangos.js --log.level debug
     # ALL
-    for curcat in `ls PROCESS`
+    for curcat in `ls ${MYDATADIR}/PROCESS`
         do
         # Source all the dependencies function for each type
         # . ./TOOLS/arangodb-utility.bash
@@ -25,7 +26,7 @@ elif [ "${mycat}X" == "ALLX" ]
         # DEBUG:
         # echo "Going into folder PROCESS/${curcat}"
         # cd into the correct one inside PROCESS folder
-        cd ./PROCESS/${curcat}
+        cd ${MYDATADIR}/PROCESS/${curcat}
         # DEBUG:
         # echo "Got in .. now in `pwd`"        
         
@@ -61,7 +62,7 @@ elif [ "${mycat}X" == "ALLX" ]
             # Extract out only results; move the key (ID) to be primary
             # Save as for use by arangodbimp next; with the pattern arangodb-<resource-name>-pg-<current_page>.json
             cat ${curcat}-page-${i}.json \
-                | jq '.results[] \ | { _key: .id, data: values } | del(.data.id)' \
+                | jq '.results[] | { _key: .id, data: values } | del(.data.id)' \
                 | jq -c '.' >arangodb-${curcat}-page-${i}.json
                         
             # Load using arangoimp (maybe just later in one fell swoop??)
@@ -70,7 +71,7 @@ elif [ "${mycat}X" == "ALLX" ]
         done
         
         # Finish; use cd - to get back to top level directory
-        cd -
+        cd ${MYDATADIR}
         # DEBUG:
         # echo "Got out .. now in `pwd`"
     done 
@@ -82,7 +83,7 @@ else
     # DEBUG:
     # echo "Going into folder PROCESS/${curcat}"
     # cd into the correct one inside PROCESS folder
-    cd ./PROCESS/${curcat}
+    cd ${MYDATADIR}/PROCESS/${curcat}
     # DEBUG:
     # echo "Got in .. now in `pwd`"
 
@@ -91,9 +92,8 @@ else
     curcat=`echo ${curcat} | tr '[:upper:]' '[:lower:]'`
 
     # Truncate the Collection first ..
-    # Below not really needed .. :P
-    # truncate_collection ${curcat}
-
+    arangosh --javascript.execute-string "db._useDatabase('sinar'); db.${curcat}.truncate();" --log.level debug
+ 
     # Use httpie to get the top level file of current category
     # DEBUG:
     echo "Downloading http://api.popit.sinarproject.org/en/${curcat}?format=json"
@@ -118,7 +118,7 @@ else
         # Extract out only results; move the key (ID) to be primary
         # Save as for use by arangodbimp next; with the pattern arangodb-<resource-name>-pg-<current_page>.json
         cat ${curcat}-page-${i}.json \
-            | jq '.results[] \ | { _key: .id, data: values } | del(.data.id)' \
+            | jq '.results[] | { _key: .id, data: values } | del(.data.id)' \
             | jq -c '.' >arangodb-${curcat}-page-${i}.json
 
         # Load using arangoimp (maybe just later in one fell swoop??)
@@ -127,7 +127,7 @@ else
     done
 
     # Finish; use cd - to get back to top level directory
-    cd -
+    cd ${MYDATADIR}
     # DEBUG:
     # echo "Got out .. now in `pwd`"
 
