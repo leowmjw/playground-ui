@@ -90,6 +90,53 @@ elif [ "${mycat}X" == "ALLX" ]
         # echo "Got out .. now in `pwd`"
 
     done
+else
+
+    echo "Going into folder MAPIT/${mycat}"
+    # Check first if folder exists??
+    curcat=${mycat}
+    # cd into the correct one inside PROCESS folder
+    cd ${MYDATADIR}/MAPIT/${curcat}
+
+    # NOTE: MapIT is CASE SENSITIVE!
+    # http://mapit.sinarproject.org/areas/PAR is different from http://mapit.sinarproject.org/areas/par  !!
+    # First one; will match type "PAR"; the others will match name with prefix "par.."
+    oricurcat=${curcat}
+
+    # Can use below if Bash 4 and above ..
+    # curcat={$curcat,,}
+    curcat=`echo ${curcat} | tr '[:upper:]' '[:lower:]'`
+
+    # Truncate the whole collection first; to be controlled by a flag of some sort??
+    arangosh --javascript.execute-string "db._useDatabase('sinar'); db.${curcat}.truncate(); db.${curcat}_details.truncate();" --log.level debug
+
+    # Get the initial file
+    # leow$ http http://mapit.sinarproject.org/areas/PAR -o mapit_par.json
+    # DEBUG:
+    echo "Downloading http://mapit.sinarproject.org/areas/${oricurcat}?type=${oricurcat}"
+    http "http://mapit.sinarproject.org/areas/${oricurcat}?type=${oricurcat}" -o ${curcat}.json
+
+    # Minor processing to get so the key is name that can be looked up; and loaded into arangodb
+    # leow$ cat mapit_par.json | jq '.[] | { _key:.name, data: values } '
+
+    cat ${curcat}.json | jq '.[] | { _key:.name, data: values } ' \
+        | jq -c '.' >arangodb-${curcat}-index.json
+
+    # Load using arangoimp (maybe just later in one fell swoop??)
+    arangoimp --server.database=sinar --collection=${curcat} \
+        --file=arangodb-${curcat}-index.json
+
+    # Minor processing to get the IDs
+    # http://stackoverflow.com/questions/2859908/iterating-over-each-line-of-ls-l-output
+    # leow$ cat mapit_par.json | jq '.[] | .id' |  while read x; do echo "BOO is $x"; done
+    # Using the IDs; call to extract out the rest; with the _key being the ID
+    # NOTE: The 1 sec sleep in between while calls do make sure mapit rate limit is not triggered
+    cat ${curcat}.json | jq '.[] | .id' | while read x ; do sleep 1; extract_details ${curcat} ${x} ; done
+
+    # Finish; use cd - to get back to top level directory
+    cd ${MYDATADIR}
+    # DEBUG:
+    # echo "Got out .. now in `pwd`"
 
 fi
 
