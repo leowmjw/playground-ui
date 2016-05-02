@@ -4,41 +4,43 @@
 
 <template>
     <div>
-        <div>
-            <voter-search-bar :msg=parentMsg />
-        </div>
-        <div>
-            <input v-model="parentMsg"/><br/>
-        </div>
-        <div>
-            <mapvisualization :my-message=parentMsg></mapvisualization>
-            <!--
-                <div>
-                    <ecResults></ecResults>
-                    <mapitResults></mapitResults>
-                </div>
-            -->
-        </div>
-        bob
+        <gmaps></gmaps>
+        <!-- Activate components that you want to play with -->
+        <!-- Lat: 3.0765802072620043 Lng: 101.52400493164055 -->
     </div>
+    <!-- Deactivated, copy to below ..
+        <gmaps mylat="3.1443" mylng="101.6057" mapid="manju"></gmaps>
+        <gmaps mylat="3.07658" mylng="101.5240" mapid="michael"></gmaps>
+    <dashboard></dashboard>
+    -->
 </template>
 
 <script>
-    import voterSearchBar from './components/voterSearchBar.vue';
-    import mapvisualization from './components/mapVisualization.vue';
+    import Dashboard from './components/Dashboard.vue';
+    import GMaps from './components/GMaps.vue';
 
-    module.exports =
-    {
+    // Test out hybrid component for GMaps
+    // https://github.com/hpneo/gmaps
+
+    // Test out component for Google Maps
+    // https://github.com/GuillaumeLeclerc/vue-google-maps-example
+    // FAILED!  Need to try again :(
+
+    // Test out components for Leaflet
+    // https://www.npmjs.com/package/vue-leaflet
+
+    // Test out visualization
+    // http://c3js.org/
+
+    // Test out panels
+    // https://github.com/ericmcdaniel/vue-panel
+
+    export default {
         components: {
-            'voter-search-bar': voterSearchBar,
-            mapvisualization
-        },
-        data () {
-            return {
-                parentMsg: ""
-            }
+            dashboard: Dashboard,
+            gmaps: GMaps
         }
-    }
 
+    }
 </script>
 
