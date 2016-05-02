@@ -77,7 +77,7 @@
     let util = require('util')
 
     export default {
-        props: ['searcharea'],
+        props: ['searcharea', 'selectedarea'],
         components: {},
         data () {
             return {
@@ -98,6 +98,9 @@
         },
         methods: {
             searchByKeyword: function () {
+                // Always reset the selected when a search is triggered
+                // this.selectedarea = null
+
                 // Try to search by Person Name ..
 
                 // Try tp search by Organization Name ..
@@ -107,6 +110,9 @@
                 // Model.searchMultiple.call(this, this.keyword)
             },
             searchAreaByKeyword: function () {
+                // Always reset the selected when a search is triggered
+                // this.selectedarea = null
+
                 this.msg = "Found Area result for " + this.state.keyword
 
                 Model.searchArea.call(this.state, this.state.keyword)
@@ -118,6 +124,7 @@
                     console.error("Nothing to do ..")
                 } else {
                     this.searcharea = area_id
+                    this.selectedarea = area_id
                     this.state.keyword = area_id
                     this.searchAreaByKeyword()
                 }
@@ -127,7 +134,8 @@
                 if (area_id == null || area_id == undefined || area_id == '') {
                     console.error("Nothing to do ..")
                 } else {
-                    this.searcharea = area_id
+                    // this.searcharea = area_id
+                    this.selectedarea = area_id
                 }
             },
             debugObject: function (myObj) {

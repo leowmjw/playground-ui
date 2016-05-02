@@ -23,13 +23,15 @@
 
     <div class="row">
         <div>
+            <!--
             <div class="placeholder">
-                <input type="hidden" v-model="searcharea"
+                <input type="text" v-model="searcharea"
                        @change="displayAreaByID | debounce 300"
                        placeholder="Display Map of Area by ID (P001, P222) .."
                        disabled
                 >
             </div>
+            -->
             <div>
                 <div class="row">
                     <!--
@@ -59,7 +61,7 @@
     import ShowTheWay from './ShowTheWay.vue'
 
     export default {
-        props: ['searcharea', 'mylat', 'mylng', 'mapid'],
+        props: ['searcharea', 'selectedarea', 'mylat', 'mylng', 'mapid'],
         components: {
             showtheway: ShowTheWay
         },
@@ -76,7 +78,7 @@
                     zon: null
                 },
                 geojsons: {
-                    par: null,
+                    par: "BOB",
                     dun: null,
                     are: null,
                     dm: null,
@@ -85,7 +87,41 @@
                 arangodb: null
             }
         },
+        watch: {
+            'selectedarea': function (val) {
+                // DEBUG:
+                console.error('new: %s', val)
+                let p = Model.getGeoJSONByArea(val)
+                // NOTE: Below is valid ES6 even though IntelliJ does not acknoledge it is so :P
+                p.then(function (value) {
+                    // DEBUG:
+                    console.error("GeoJSON: ", value)
+                    console.error("*****CHECK******: ", JSON.stringify(this.geojsons.par))
+                    this.geojsons.par = value[0].c
+                    if (this.geojsons.par == null) {
+                        console.error("NO Valid Shapefile; do nothing ...")
+                    } else {
+                        // If pointer exist; must be removed first ..
+                        // after confirm that NEW polygon exists!
+                        if (this.mypolygons.par == null) {
+                            console.error("NEW: Creating ...")
+                        } else {
+                            console.error("EXISTS: Removing ... ", this.geojsons.par)
+                            // use setMap to null
+                            this.mypolygons.par.setMap(null)
+                        }
+                        // DEBUG:
+                        // console.error("AFTER: ", JSON.stringify(this.geojsons.par))
+                        let new_polygon_properties = Utils.refocusSelectedArea(this.geojsons.par)
+                        console.error("New POLYGON: ", new_polygon_properties)
+                        this.mypolygons.par = this.mymap.drawPolygon(new_polygon_properties)
+                    }
+                }.bind(this))
+            }
+        },
         ready () {
+            // DEBUG:
+            // console.error("READY in GMaps!!")
 
             // if got mylat/mylng; do something??
             // If hard coded starting point; no need to look up ..

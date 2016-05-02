@@ -3,6 +3,8 @@
  */
 "use strict";
 
+// Assumes "this" context must be passed in from main GMaps component via .call or .bind
+
 let util = require('util')
 
 // Hide all internal implementation here ...
@@ -127,6 +129,23 @@ function _refreshGeoLocation(callThisWhenHavePosition, mylat = null, mylng = nul
     }
 }
 
+function _renderGeoJSON(geojson, options) {
+
+    // Create object with the necessary options??
+
+    // Attach it to the map??
+    let new_polygon_properties = Object.assign({
+        paths: geojson,
+        useGeoJSON: true
+    }, options)
+    return new_polygon_properties
+
+}
+
+function _findGeoJSONCenter() {
+    // Given GeoJSON; return back LatLng needed by GMaps API
+}
+
 // Exports only of Public API ; cause in it; if bind via call; this gets mixed up
 module.exports = {
 
@@ -140,6 +159,25 @@ module.exports = {
 
         // It will need to handle itself; but passes a default ..
         _refreshGeoLocation.call(this, _initGmaps, mylat, mylng);
+    },
+    refocusSelectedArea: function (geojson) {
+        // Using the GeoJSON returned
+        // _findGeoJSONCenter
+        // Zoom to fill it and move Marker to returned Location
+
+        // use Map function to panBound
+        // using the geojson above ..
+
+
+        let par_options = {
+            strokeColor: '#BBD8E9',
+            strokeOpacity: 1,
+            strokeWeight: 3,
+            fillColor: '#BBD8E9',
+            fillOpacity: 0.5
+        }
+        // _renderGeoJSON
+        return _renderGeoJSON(geojson, par_options)
     }
 
 }
