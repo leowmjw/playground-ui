@@ -28,13 +28,14 @@
 
         <!-- Projects Row -->
         <div class="row">
-            <mpsearch :searcharea.sync="searcharea"></mpsearch>
+            <mpsearch :searcharea.sync="searcharea" :selectedarea.sync="selectedarea"></mpsearch>
         </div>
         <!-- /.row -->
 
         <div class="row">
             <div class="col-md-10 portfolio-item">
-                <gmaps :searcharea="searcharea" mapid="par"></gmaps>
+                <!-- SelectedArea: {{ selectedarea }} -->
+                <gmaps :searcharea.sync="searcharea" :selectedarea="selectedarea" mapid="par"></gmaps>
             </div>
             <div class="col-md-5 portfolio-item">
                 <gmaps mylat="3.07658" mylng="101.5240" mapid="michael"></gmaps>
@@ -191,6 +192,7 @@
                 // its initial state.
                 msg: 'OPenSpending Lite .. ole!',
                 searcharea: null,
+                selectedarea: null
             }
         },
         ready () {

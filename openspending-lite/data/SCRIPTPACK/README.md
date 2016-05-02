@@ -1,0 +1,1 @@
+Bash Scriptpack to prepare data needed for use in ArangoDB

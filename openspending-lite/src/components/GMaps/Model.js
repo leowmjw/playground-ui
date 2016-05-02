@@ -16,21 +16,15 @@ let db = new arangojs.Database({
 // Don't for get to change' or set by default!!!
 db.useDatabase(`${config.db.name}`)
 
-function *_genMapItData(aql_query) {
-    console.log("BEFORE: ", util.inspect(this.resultjson))
-    this.resultjson = yield _queryAllArangoRepo.call(this, aql_query, {}, {count: true})
-    console.log("AFTER: ", util.inspect(this.resultjson))
-}
-
 function _lookupMapItIDByArea(area_id) {
 
 }
 
-function _promiseQueryAllArangoRepo(aql_query, options) {
+function _promiseQueryAllArangoRepo(aql_query, bind_vars, options) {
     // Returns Promise
 
     return new Promise(function (resolve, reject) {
-        db.query(aql_query, options).then(
+        db.query(aql_query, bind_vars, options).then(
             cursor => {
                 // console.log(cursor.count, " result(s) returned!!")
                 // self.result = cursor.count
@@ -46,11 +40,6 @@ function _promiseQueryAllArangoRepo(aql_query, options) {
                 // DEBUG:
                 // console.log(JSON.stringify(value))
                 resolve(value)
-                // resultjson = "DUDE"
-                // if (config.db.debug) {
-                //    this.debugresult = JSON.stringify(this.result)
-                // }
-                // console.log(util.inspect(this.resultjson))
             },
             err => {
                 // console.error("ERR: ", err)
@@ -60,70 +49,40 @@ function _promiseQueryAllArangoRepo(aql_query, options) {
     })
 }
 
-function _queryAllArangoRepo(aql_query, options) {
-    // Returns array
-    db.query(aql_query, options).then(
-        cursor => {
-            // console.log(cursor.count, " result(s) returned!!")
-            // self.result = cursor.count
-            return cursor.all()
-        },
-        err => {
-            console.error("ERR: ", err)
-        }
-    ).then(
-        value => {
-            // console.log("Got back from ARANGODB: ", util.inspect(value))
-            // DEBUG:
-            // console.log(JSON.stringify(value))
-            this(value)
-            // resultjson = "DUDE"
-            // if (config.db.debug) {
-            //    this.debugresult = JSON.stringify(this.result)
-            // }
-            // console.log(util.inspect(this.resultjson))
-        },
-        err => {
-            console.error("ERR: ", err)
-        }
-    )
-}
 
 module.exports = {
     getGeoJSONByArea: function (area_id) {
-        // Look up the Internal ID from area_id
-        let mapit = _genMapItData()
-        let myoutput = null
-        myoutput = mapit.next()
-    },
-    testPromise: function () {
-        // Data structure
-        let resultjson = {
-            resultjson: "BOB",
-            lat: null,
-            lng: null
-        }
 
-        console.log("resultJSON", util.inspect(resultjson))
-        let aql_query = `
-            FOR p IN posts
-                LIMIT 0,2
-                RETURN p
+        return new Promise(function(resolve, reject) {
+            let aql_query = `
+            FOR m IN par
+                FILTER m._key == @id
+                FOR pd IN par_details
+                    FILTER TO_STRING(m.data.id) == pd._key
+                RETURN {
+                    n: m.data.name,
+                    c: pd.data.coordinates
+                }
         `
-        let myprom = new Promise(function (resolve, reject) {
-            _queryAllArangoRepo.call(resolve, aql_query, {}, {count: true})
-        })
-            .then(
+            let bind_vars = {
+                "id": area_id
+            }
+            let p1 = _promiseQueryAllArangoRepo(aql_query, bind_vars, {count: true})
+            p1.then(
                 (value) => {
-                    console.log("PASS!!!", value)
-                },
+                    // DEBUG:
+                    // console.log("getGeoJSONByArea: ", util.inspect(value))
+                    resolve(value)
+                    // this.geojsons.par = value
+                }
+            ).catch(
                 (err) => {
-                    console.error("DIED!!")
+                    // DEBUG:
+                    // console.error("ERR: ", err)
+                    reject(err)
                 }
             )
-
-        // let it = _genMapItData.call(resultjson, aql_query)
-        // console.log("RETURN: ", util.inspect(it.next().value))
+        })
     },
     testResolvePromise: function () {
         let aql_query = `

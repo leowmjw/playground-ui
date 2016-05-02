@@ -1,0 +1,1 @@
+Put the Helper ArangoDB JS scripts here; to be executed via arangosh
