@@ -90,33 +90,53 @@
         watch: {
             'selectedarea': function (val) {
                 // DEBUG:
-                console.error('new: %s', val)
+                // console.error('new: %s', val)
                 let p = Model.getGeoJSONByArea(val)
-                // NOTE: Below is valid ES6 even though IntelliJ does not acknoledge it is so :P
+                // NOTE: Use the .bind to get the this context into the resolver
                 p.then(function (value) {
-                    // DEBUG:
-                    console.error("GeoJSON: ", value)
-                    console.error("*****CHECK******: ", JSON.stringify(this.geojsons.par))
-                    this.geojsons.par = value[0].c
-                    if (this.geojsons.par == null) {
-                        console.error("NO Valid Shapefile; do nothing ...")
-                    } else {
-                        // If pointer exist; must be removed first ..
-                        // after confirm that NEW polygon exists!
-                        if (this.mypolygons.par == null) {
-                            console.error("NEW: Creating ...")
-                        } else {
-                            console.error("EXISTS: Removing ... ", this.geojsons.par)
-                            // use setMap to null
-                            this.mypolygons.par.setMap(null)
-                        }
-                        // DEBUG:
-                        // console.error("AFTER: ", JSON.stringify(this.geojsons.par))
-                        let new_polygon_properties = Utils.refocusSelectedArea(this.geojsons.par)
-                        console.error("New POLYGON: ", new_polygon_properties)
-                        this.mypolygons.par = this.mymap.drawPolygon(new_polygon_properties)
-                    }
-                }.bind(this))
+                            // DEBUG:
+                            // console.error("GeoJSON: ", value)
+                            // console.error("*****CHECK******: ", JSON.stringify(this.geojsons.par))
+                            // TODO: Strengthen checks so that if invalid; don't overwrite a valid GeoJSON?
+                            this.geojsons.par = value[0].c
+
+                            if (this.geojsons.par != null) {
+                                // Only DO something if I actually have a GeoJSON
+                                // If pointer exist; must be removed first ..
+                                // after confirm that NEW polygon exists!
+                                if (this.mypolygons.par != null) {
+                                    // If has existing Polygon; remove it first ..
+                                    // DEBUG:
+                                    // console.error("EXISTS: Removing ... ", this.geojsons.par)
+                                    // use setMap to null
+                                    this.mypolygons.par.setMap(null)
+                                }
+                                // DEBUG:
+                                // console.error("AFTER: ", JSON.stringify(this.geojsons.par))
+                                let [lat_lng_bounds, new_polygon_properties] = Utils.refocusSelectedArea(this.geojsons.par)
+                                // Draw Polygons first ..
+                                // DEBUG:
+                                // console.error("New POLYGON: ", new_polygon_properties)
+                                this.mypolygons.par = this.mymap.drawPolygon(new_polygon_properties)
+                                // then pan and zoom nicely to it ...
+                                // As per suggested by: https://code.google.com/p/gmaps-api-issues/issues/detail?id=2575
+                                // DEBUG:
+                                // console.error("New Boundary: ", util.inspect(lat_lng_bounds))
+
+                                this.mymap.map.panTo(lat_lng_bounds.getCenter())
+                                this.mymarker.setPosition(lat_lng_bounds.getCenter())
+                                // NOTE: Need to .bind this context again otherwise it does not work!
+                                google.maps.event.addListenerOnce(
+                                        this.mymap.map, 'idle',
+                                        function () {
+                                            this.mymap.map.fitBounds(lat_lng_bounds)
+                                        }.bind(this)
+                                )
+                            }
+                        }.bind(this)
+                ).catch(function (err) {
+                    console.error("ERR: ", err)
+                })
             }
         },
         ready () {

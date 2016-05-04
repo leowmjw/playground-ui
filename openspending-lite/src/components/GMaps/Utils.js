@@ -85,7 +85,7 @@ function _setupMapMarker(final_lat, final_lng) {
     });
 }
 
-function _refreshGeoLocation(callThisWhenHavePosition, mylat = null, mylng = null) {
+function _refreshGeoLocation(callThisWhenHavePosition, mylat, mylng) {
 
     // Have those graphics to click to reestablish location ...
     if ("geolocation" in navigator) {
@@ -109,21 +109,26 @@ function _refreshGeoLocation(callThisWhenHavePosition, mylat = null, mylng = nul
             }
         )
 
-        navigator.geolocation.watchPosition(
-            (position) => {
-                // Update the positions ..
-                this.location_marker.lat = position.coords.latitude
-                this.location_marker.lng = position.coords.longitude
-                // Update GMaps marker?
-                this.mymarker.setPosition({
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                })
-            },
-            (err) => {
-                console.error("ERR: =>", err.message)
-            }
-        )
+        // Should use a prop to decide to watchPosition or not ..
+        // This method returns a watch ID value then can be used to unregister the handler by passing it to
+        // the Geolocation.clearWatch() method.
+        /*
+         navigator.geolocation.watchPosition(
+         (position) => {
+         // Update the positions ..
+         this.location_marker.lat = position.coords.latitude
+         this.location_marker.lng = position.coords.longitude
+         // Update GMaps marker?
+         this.mymarker.setPosition({
+         lat: position.coords.latitude,
+         lng: position.coords.longitude
+         })
+         },
+         (err) => {
+         console.error("ERR: =>", err.message)
+         }
+         )
+         */
     } else {
         // DO nothing ... just quit with null??
     }
@@ -142,8 +147,29 @@ function _renderGeoJSON(geojson, options) {
 
 }
 
-function _findGeoJSONCenter() {
+function _getLatLngBound(geojson) {
+    // Not as robust; see arrayToLatLng as the better robust; use demethodize??
+    // https://github.com/hpneo/gmaps/blob/master/lib/gmaps.core.js
+    let lat_lng_bounds = new google.maps.LatLngBounds()
     // Given GeoJSON; return back LatLng needed by GMaps API
+    let coordinates = geojson[0]
+    // Iterate through all the points
+    for (let latlng of coordinates) {
+        // For each point
+        // let mylat, mylng = latlng.split(",")
+        // Create a LatLng that will be placed inside LatLngBounds
+        // GeoJSON you flip the points; see the gmaps implementation
+        let myloc = new google.maps.LatLng(latlng[1], latlng[0])
+        // DEBUG:
+        // console.log("LAT: %s, LNG: %s", myloc.lat(), myloc.lng())
+        // Append to the Boudnayr ...
+        lat_lng_bounds.extend(myloc)
+    }
+
+    // Returns the completed LatLngBounds ..
+    // DEBUG:
+    // console.error("BOUNDS: ", util.inspect(lat_lng_bounds))
+    return lat_lng_bounds
 }
 
 // Exports only of Public API ; cause in it; if bind via call; this gets mixed up
@@ -161,23 +187,21 @@ module.exports = {
         _refreshGeoLocation.call(this, _initGmaps, mylat, mylng);
     },
     refocusSelectedArea: function (geojson) {
-        // Using the GeoJSON returned
-        // _findGeoJSONCenter
-        // Zoom to fill it and move Marker to returned Location
+        // Validations here; use JOI??
+        // Customizations here; with rules ...
 
-        // use Map function to panBound
-        // using the geojson above ..
-
-
+        // Properties customization based on the type??
         let par_options = {
-            strokeColor: '#BBD8E9',
+            strokeColor: '#0059A7',
             strokeOpacity: 1,
-            strokeWeight: 3,
+            strokeWeight: 4,
             fillColor: '#BBD8E9',
             fillOpacity: 0.5
         }
         // _renderGeoJSON
-        return _renderGeoJSON(geojson, par_options)
+        return [
+            _getLatLngBound(geojson),
+            _renderGeoJSON(geojson, par_options)
+        ]
     }
-
 }

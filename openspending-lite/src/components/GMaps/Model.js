@@ -16,10 +16,6 @@ let db = new arangojs.Database({
 // Don't for get to change' or set by default!!!
 db.useDatabase(`${config.db.name}`)
 
-function _lookupMapItIDByArea(area_id) {
-
-}
-
 function _promiseQueryAllArangoRepo(aql_query, bind_vars, options) {
     // Returns Promise
 
@@ -49,7 +45,6 @@ function _promiseQueryAllArangoRepo(aql_query, bind_vars, options) {
     })
 }
 
-
 module.exports = {
     getGeoJSONByArea: function (area_id) {
 
@@ -60,7 +55,7 @@ module.exports = {
                 FOR pd IN par_details
                     FILTER TO_STRING(m.data.id) == pd._key
                 RETURN {
-                    n: m.data.name,
+                    n: m.data.name, 
                     c: pd.data.coordinates
                 }
         `
