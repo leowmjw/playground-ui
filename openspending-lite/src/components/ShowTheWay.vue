@@ -112,7 +112,7 @@
                 <a
                         class="showtheway-a showtheway-google-maps" target="_blank" data-w="1"
                         title="Show the way with Google Maps"
-                        href="https://showtheway.io/to/{{mylat}},{{mylng}}"
+                        href="https://showtheway.io/to/{{mylat}},{{mylng}}?name=#google-maps"
                         style="line-height: normal;"
                 >
                     <img class="showtheway-google-maps-image" alt="Google Maps"
@@ -127,7 +127,7 @@
                 <a
                         class="showtheway-a showtheway-apple-maps" target="_blank" data-w="1"
                         title="Show the way with Apple Maps"
-                        href="https://showtheway.io/to/{{mylat}},{{mylng}}"
+                        href="https://showtheway.io/to/{{mylat}},{{mylng}}?name=#apple-maps"
                         style="line-height: normal;">
                     <img class="showtheway-apple-maps-image" alt="Apple Maps"
                          title="Show the way with Apple Maps"
@@ -140,7 +140,7 @@
                 </a>
                 <a
                         class="showtheway-a showtheway-waze" target="_blank" data-w="1" title="Show the way with Waze"
-                        href="https://showtheway.io/to/{{mylat}},{{mylng}}"
+                        href="https://showtheway.io/to/{{mylat}},{{mylng}}?name=#waze"
                         style="line-height: normal;">
                     <img class="showtheway-waze-image" alt="Waze <small>(for mobile)</small>"
                          title="Show the way with Waze"
@@ -153,7 +153,7 @@
                 </a>
                 <a
                         class="showtheway-a showtheway-uber" target="_blank" data-w="1" title="Show the way with Uber"
-                        href="https://showtheway.io/to/{{mylat}},{{mylng}}"
+                        href="https://showtheway.io/to/{{mylat}},{{mylng}}?name=#uber"
                         style="line-height: normal;">
                     <img class="showtheway-uber-image"
                          alt="Uber <small>(for mobile)</small>"
@@ -213,6 +213,11 @@
 
     let util = require('util')
 
+    // TODO: Add for HERE, Bing
+    // TODO: Add mobile device detection so that the ordering will be different based on detected device?
+    // TODO: Add prop for the "Name" of the location; so it looks nicer when displayed in ShowtheWay
+    // TODO: Refactor the common structure, can be placed in a loop
+    // TODO: According to Arief; there are alternative layouts; horizontal layout too ..
     export default {
         props: ['mylat', 'mylng'],
         components: {},

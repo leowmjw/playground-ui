@@ -123,8 +123,12 @@
                                 // DEBUG:
                                 // console.error("New Boundary: ", util.inspect(lat_lng_bounds))
 
-                                this.mymap.map.panTo(lat_lng_bounds.getCenter())
+                                let bounds_center = lat_lng_bounds.getCenter()
+                                this.mymap.map.panTo(bounds_center)
                                 this.mymarker.setPosition(lat_lng_bounds.getCenter())
+                                this.location_marker.lat = bounds_center.lat()
+                                this.location_marker.lng = bounds_center.lng()
+                                // Don;t forget to update the location_marker data structure too
                                 // NOTE: Need to .bind this context again otherwise it does not work!
                                 google.maps.event.addListenerOnce(
                                         this.mymap.map, 'idle',
