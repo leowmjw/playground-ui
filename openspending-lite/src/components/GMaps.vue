@@ -141,6 +141,11 @@
                 ).catch(function (err) {
                     console.error("ERR: ", err)
                 })
+            },
+            'mylat': function (val, old) {
+                // Assumes any changes to lng; wil ltrigger at least in lat too!!
+                // cache?  nope ..
+                console.error("NEW: %s OLD: %s", val, old)
             }
         },
         ready () {

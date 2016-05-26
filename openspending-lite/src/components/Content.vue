@@ -26,6 +26,24 @@
         </div>
         <!-- /.row -->
 
+        <!-- Aduanku Row -->
+        <div class="row">
+            <aduanku></aduanku>
+            <!--
+            <div class="col-md-6 portfolio-item">
+                <a href="#">
+                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
+                </a>
+                <h3>
+                    <a href="#">Project Four</a>
+                </h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida
+                    pellentesque urna varius vitae.</p>
+            </div>
+            -->
+        </div>
+        <!-- /.row -->
+
         <!-- Projects Row -->
         <div class="row">
             <mpsearch :searcharea.sync="searcharea" :selectedarea.sync="selectedarea"></mpsearch>
@@ -46,40 +64,6 @@
             </div>
             -->
         </div>
-
-        <div class="row">
-            <div class="col-md-6 portfolio-item">
-                <popit mytype="membership" pnum="ARANGODB"></popit>
-            </div>
-            <div class="col-md-6 portfolio-item">
-                <popit></popit>
-            </div>
-        </div>
-
-        <!-- Projects Row -->
-        <div class="row">
-            <div class="col-md-6 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project Three</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida
-                    pellentesque urna varius vitae.</p>
-            </div>
-            <div class="col-md-6 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project Four</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida
-                    pellentesque urna varius vitae.</p>
-            </div>
-        </div>
-        <!-- /.row -->
 
         <!-- Projects Row -->
         <div class="row">
@@ -175,6 +159,7 @@
     import PopIt from './PopIt.vue'
     import MPSearch from './MPSearch.vue'
     import GMaps from './GMaps.vue'
+    import Aduanku from './Aduanku.vue'
 
 
     export default {
@@ -182,7 +167,8 @@
         components: {
             popit: PopIt,
             mpsearch: MPSearch,
-            gmaps: GMaps
+            gmaps: GMaps,
+            aduanku: Aduanku
         },
         data () {
             return {
@@ -192,7 +178,19 @@
                 // its initial state.
                 msg: 'OPenSpending Lite .. ole!',
                 searcharea: null,
-                selectedarea: null
+                selectedarea: null,
+                dun: {
+                    searcharea: null,
+                    selectedarea: null
+                },
+                local_authorities: {
+                    searcharea: null,
+                    selectedarea: null
+                },
+                zon: {
+                    searcharea: null,
+                    selectedarea: null
+                }
             }
         },
         ready () {

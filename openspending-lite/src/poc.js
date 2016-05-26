@@ -13,18 +13,15 @@ console.log("This is cool!! PoC!!!")
 const repo = repoArangoDB(config, "aduanku")
 // const repo = repoArangoDB({}, "aduanku")
 repo.save()
-repo.query()
+// repo.query()
 let query = `
     FOR a IN aduanku
         LIMIT 0,2
         RETURN a
     `
-// let p = repo._promiseQueryAllArangoRepo(query, {}, {count: true})
-let p = repo._promiseQueryAllArangoRepo(query, {}, {})
-// DEBUG:
-console.log(util.inspect(p))
+let p = repo.query(query, {}, {count: true})
 p.then(
-    value => repo.log("PROMISE:", value)
+    value => repo.log("VALUE:", value)
 ).catch(
     err => repo.err()
 )

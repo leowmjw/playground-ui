@@ -37,7 +37,7 @@ const repoArangoDB = stampit
                     // with needed bindings??
                     if ((this.dbconn == null) || (this.dbconn == undefined)) {
                         // DEBUG:
-                        this.err("No change when init!!; is NULL!!!")
+                        // this.err("No change when init!!; is NULL!!!")
                         reject("No dbconn too!!")
                         return
                     }
@@ -47,12 +47,13 @@ const repoArangoDB = stampit
 
                     this.dbconn.query(aql_query, bind_vars, options).then(
                         cursor => {
-                            this.log(cursor.count, " result(s) returned!!")
+                            this.log("%s result(s) returned!!", cursor.count)
                             // self.result = cursor.count
                             return cursor.all()
                         },
                         err => {
-                            this.err("ERR: ", err.code)
+                            // DEBUG:
+                            // console.error("QUERY_ERR: ", util.inspect(err))
                             reject(err.code)
                         }
                     ).then(
@@ -63,46 +64,25 @@ const repoArangoDB = stampit
                             resolve(value)
                         },
                         err => {
-                            this.err("ERR: ", err.code)
+                            // DEBUG:
+                            // this.err("RAW_ERR_ARANGODB: ", util.inspect(err))
                             reject(err.code)
                         }
-                    ).catch(
-                        err => reject(err.code)
                     )
                 }.bind(this))
 
             },
-            save () {
-                this.log("ArangoDB implementation of SAVE!!!")
-            },
-            query() {
-                this.log("ArangoDB implementation of QUERY!!!")
+            query(...opts) {
+                // Validation to be injected here perhaps??
+                // DEBUG:
+                // this.err("QUERY INVOKED with ", util.inspect(opts))
+                return this._promiseQueryAllArangoRepo(...opts)
             }
         }
     ).refs({
             dbconn: null
         }
     )
-  
+
 
 export default stampit.compose(repoInterface, repoArangoDB)
-
-// From: http://justinfagnani.com/2015/12/21/real-mixins-with-javascript-classes/
-// const mix = (superclass) => new MixinBuilder(superclass)
-
-// class ArangoRepo {
-//    static mydb = null
-/*
- constructor(height, width) {
- this.height = height;
- this.width = width;
- }
- */
-
-//    get area() {
-//
-//    }
-//}
-
-// export default ArangoRepo
-

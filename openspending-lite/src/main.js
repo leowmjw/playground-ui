@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-var vm = new Vue({
+new Vue({
   el: 'body',
   components: { App },
   data: {
