@@ -16,7 +16,8 @@ export default {
     getAllIssues: function (options = null) {
         const myaql = `
         FOR a IN aduanku
-            LIMIT 10,20
+            // LIMIT 10,20
+            FILTER LIKE(a.search,"%#%")
             RETURN {
                 refid: a._key,
                 data: a.data
@@ -31,7 +32,16 @@ export default {
 
     },
     getAllIssuesByTopic: function (topic) {
-
+        const myaql = `
+        FOR a IN aduanku
+            // LIMIT 10,20
+            FILTER LIKE(a.search,"%#%")
+            RETURN {
+                refid: a._key,
+                data: a.data
+            }        
+        `
+        return repo.query(myaql, {}, {count: true})
     }
 
 }

@@ -145,7 +145,7 @@
             'mylat': function (val, old) {
                 // Assumes any changes to lng; wil ltrigger at least in lat too!!
                 // cache?  nope ..
-                console.error("NEW: %s OLD: %s", val, old)
+                console.error("MYLAT CHANGED!!!! NEW: %s OLD: %s", val, old)
             }
         },
         ready () {
