@@ -73,10 +73,13 @@
     <div class="col-md-6 portfolio-item">
         <!-- Drop down of Authority to select -->
         <!-- For now just list down the important ones .. -->
-        <select v-model="current_topic">
+        <select v-model="current_topic" @change="chooseTopicToShow">
             <option value="" selected="selected">Choose Focus Topic</option>
-            <option value="health"></option>
-            <option value="safety"></option>
+            <option value="health">Health</option>
+            <option value="safety">Safety</option>
+            <option value="childsafety">Child Safety</option>
+            <option value="cycling">Cycling</option>
+            <option value="oku">Orang Kurang Upaya Issues</option>
         </select>
         <template v-if="current_topic">
             <h3>Selected Topic {{ current_topic }}</h3>
@@ -98,11 +101,9 @@
             <tbody>
             <tr v-for="entry of view_issues">
                 <td>
-                    <div class="metadata">
+                    <div>
                         <a href="https://aduanku.my/report/{{ entry.refid }}"
-                           target="_blank">{{ entry.data.title[0] }} ({{ entry.data.service_code[0] }})</a>
-                        Status: {{ entry.data.status[0] }}
-                        {{ entry.data.requestor_name[0] }} reported on {{ entry.data.requested_datetime[0] }}
+                           target="_blank">{{ entry.refid }} ({{ entry.data.status[0] }})</a>
                     </div>
                 </td>
                 <td v-for="key of issue_columns.map(extractKey)">
@@ -110,10 +111,11 @@
                 </td>
                 <td>
                     <div class="metadata">
-                        Updated: {{ entry.data.updated_datetime[0] }}
+                        {{ entry.data.requestor_name[0] }} reported on {{ entry.data.requested_datetime[0] }}
+                        Updated: {{ entry.data.updated_datetime[0] }} <br/>
+                        Code: {{ entry.data.service_code[0] }} <br/>
                         Authority Responsible: {{ entry.data.agency_responsible[0].recipient[0] }}
-                        <button @click.prevent=updateCurrentIssueLocation(
-                                {{ entry.data.lat[0] }}, {{ entry.data.lng[0] }})>
+                        <button @click.prevent.stop=updateCurrentIssueLocation(entry.data)>
                             View Map
                         </button>
                     </div>
@@ -126,8 +128,11 @@
 
     <div class="col-md-6 portfolio-item">
         <!-- GMaps here ... changes when mylat, mylng .. -->
+        <gmaps :selectedarea="selectedarea" mapid="aduanku"></gmaps>
+        <!--
         <gmaps :mylat=current_issue_location.lat
                :mylng=current_issue_location.lng mapid="aduanku"></gmaps>
+               -->
     </div>
 
 </template>
@@ -136,10 +141,11 @@
 
     import util from 'util'
     import Model from './Aduanku/Model'
+    import Utils from './Aduanku/Utils'
     import GMaps from './GMaps.vue'
 
     export default {
-        props: [],
+        props: ['selectedarea'],
         components: {
             gmaps: GMaps
         },
@@ -185,21 +191,44 @@
                 return i.key
             },
             chooseTopicToShow: function () {
-
+                // DEBUG:
+                // console.error("Call getAllIssuesByTopic with PARAM: ", this.current_topic)
                 const p = Model.getAllIssuesByTopic(this.current_topic)
                 p.then(
                         function (value) {
-
+                            this.view_issues = value
                         }.bind(this)
                 ).catch(
                         function (err) {
-
+                            console.error("PROMISE/getAllIssuesByTopic:", err)
                         }
                 )
             },
-            updateCurrentIssueLocation: function (lat, lng) {
-                this.current_issue_location.lat = lat
-                this.current_issue_location.lng = lng
+            updateCurrentIssueLocation: function (data) {
+                // DEBUG:
+                // console.error("LAT: %s LNG: %s", data.lat[0], data.long[0])
+                const p = Utils.whichPARIsPointIn(data)
+                // Get out the area ID from here ...
+                // Further checks to make sure it is not empty?? .. maybe ..
+                p.then(
+                        function (value) {
+                            // All OK; then update the internal View Status
+                            this.current_issue_location.lat = data.lat[0]
+                            this.current_issue_location.lng = data.long[0]
+                            // should trigger the $watch for lat ..
+                            // OK; value == Area ID
+                            // console.error("VAL:", value)
+                            this.selectedarea = value
+                            // Visually; slect gmaps with class "portfolio-item" marked up
+                            const issue_gmaps = document.querySelector("div#map-aduanku")
+                            // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+                            issue_gmaps.scrollIntoView()
+                        }.bind(this)
+                ).catch(
+                        function (err) {
+                            console.error(util.inspect(err))
+                        }
+                )
             }
         },
         computed: {

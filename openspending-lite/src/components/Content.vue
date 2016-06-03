@@ -68,21 +68,6 @@
         <!-- Projects Row -->
         <div class="row">
             <div class="col-md-6 portfolio-item">
-                <div>
-                    <popit v-for="n in 3" :pnum=n></popit>
-                    <popit mytype="organization"></popit>
-                </div>
-                <div>
-                    <popit mytype="membership"></popit>
-                    <popit mytype="post"></popit>
-                </div>
-                <div v-for="n in 10">
-                    <h2>{{ n }} =====> </h2>
-                    <popit :pnum=n></popit>
-                </div>
-
-            </div>
-            <div class="col-md-6 portfolio-item">
                 <a href="#">
                     <img class="img-responsive" src="http://placehold.it/700x400" alt="">
                 </a>

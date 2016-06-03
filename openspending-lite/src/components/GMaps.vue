@@ -146,6 +146,7 @@
                 // Assumes any changes to lng; wil ltrigger at least in lat too!!
                 // cache?  nope ..
                 console.error("MYLAT CHANGED!!!! NEW: %s OLD: %s", val, old)
+                // Changes the center; maybe better via the selectedarea??
             }
         },
         ready () {
