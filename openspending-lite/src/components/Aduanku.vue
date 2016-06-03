@@ -76,14 +76,12 @@
         <select v-model="current_topic" @change="chooseTopicToShow">
             <option value="" selected="selected">Choose Focus Topic</option>
             <option value="health">Health</option>
-            <option value="safety">Safety</option>
             <option value="childsafety">Child Safety</option>
             <option value="cycling">Cycling</option>
             <option value="oku">Orang Kurang Upaya Issues</option>
         </select>
         <template v-if="current_topic">
             <h3>Selected Topic {{ current_topic }}</h3>
-            <h4>Selected Coordinate: {{ selected_latlng }}</h4>
         </template>
         <!-- Opened; closed; Pending old?? -->
         <h3>All Issues (Tagged) </h3>
@@ -133,6 +131,8 @@
         <gmaps :mylat=current_issue_location.lat
                :mylng=current_issue_location.lng mapid="aduanku"></gmaps>
                -->
+        <mpsearch :selectedarea="selectedarea"></mpsearch>
+
     </div>
 
 </template>
@@ -140,14 +140,18 @@
 <script>
 
     import util from 'util'
+    // Libs for Aduanku Component
     import Model from './Aduanku/Model'
     import Utils from './Aduanku/Utils'
+    // Related Components
     import GMaps from './GMaps.vue'
+    import MPSearch from './MPSearch.vue'
 
     export default {
         props: ['selectedarea'],
         components: {
-            gmaps: GMaps
+            gmaps: GMaps,
+            mpsearch: MPSearch
         },
         data () {
             return {
