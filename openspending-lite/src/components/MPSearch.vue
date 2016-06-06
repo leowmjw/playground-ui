@@ -93,6 +93,18 @@
                 }
             }
         },
+        watch: {
+            'selectedarea': function (area_id, old) {
+                // When area change; MP too?
+                // DEBUG:
+                // console.error("AREA CHANGED!!!! NEW: %s OLD: %s", area_id, old)
+                // TODO: Trigger searchByArea ..
+                 this.selectedarea = area_id
+                 this.state.keyword = area_id
+                 this.searchAreaByKeyword()
+            }
+
+        },
         ready () {
 
         },
