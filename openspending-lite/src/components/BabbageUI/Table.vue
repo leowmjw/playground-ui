@@ -1,0 +1,111 @@
+<style>
+    .table-babbage {
+        overflow-x: scroll;
+        min-height: 25em
+    }
+
+    .table-babbage::-webkit-scrollbar {
+        -webkit-appearance: none
+    }
+
+    .table-babbage::-webkit-scrollbar:horizontal {
+        height: 11px
+    }
+
+    .table-babbage::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: rgba(0, 0, 0, .5)
+    }
+
+    .table-babbage::-webkit-scrollbar-track {
+        background-color: #fff;
+        border-radius: 8px
+    }
+
+    .table-babbage .table {
+        table-layout: fixed;
+        width: inherit;
+        min-width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 0
+    }
+
+    .table-babbage .table td, .table-babbage .table th {
+        min-width: 13em;
+        max-width: 25em;
+        overflow: hidden;
+        white-space: nowrap
+    }
+
+    .table-babbage .table th {
+        border-bottom: 1px solid #ddd;
+        background-color: #f5f5f5
+    }
+
+    .table-babbage .table th.title {
+        border-right: 0
+    }
+
+    .table-babbage .table th.operations {
+        width: 1px;
+        min-width: 1em;
+        border-left: 0;
+        text-align: right
+    }
+
+    .table-babbage .table td.simple {
+        border-bottom: 0;
+        border-top: 0
+    }
+
+    .table-babbage .table td.numeric {
+        text-align: right
+    }
+
+    .table-babbage .table th .sublabel {
+        font-weight: 400
+    }
+
+    .table.table-panel td.middle {
+        vertical-align: middle
+    }
+
+    .table.table-panel tr.adjoined td, .table.table-panel tr.adjoined th {
+        border-top: 0;
+        padding-top: 0
+    }
+
+    .table.table-panel tbody {
+        border-top: 0
+    }
+
+</style>
+
+<template>
+
+
+</template>
+
+<script>
+
+
+    export default {
+        props: ['cube', 'endpoint'],
+        components: {},
+        data () {
+            return {
+                Char: {
+                    group: ['classification_economic_econ1_label.econ1_label'],
+                    aggregates: 'adjusted.sum'
+                }
+            }
+        },
+        watch: {},
+        ready () {
+
+        },
+        computed: {}
+
+    }
+
+</script>
