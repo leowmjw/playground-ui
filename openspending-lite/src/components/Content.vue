@@ -1,4 +1,4 @@
-<style>
+<style scoped>
 
     .portfolio-item {
         margin-bottom: 25px;
@@ -23,6 +23,12 @@
                     <button @click.stop.prevent="updateGmsg">Press Me!!</button>
                 </h1>
             </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- BabbageUI Row -->
+        <div class="row">
+            <babbageui></babbageui>
         </div>
         <!-- /.row -->
 
@@ -145,6 +151,7 @@
     import MPSearch from './MPSearch.vue'
     import GMaps from './GMaps.vue'
     import Aduanku from './Aduanku.vue'
+    import BabbageUI from './BabbageUI.vue'
 
 
     export default {
@@ -153,7 +160,8 @@
             popit: PopIt,
             mpsearch: MPSearch,
             gmaps: GMaps,
-            aduanku: Aduanku
+            aduanku: Aduanku,
+            babbageui: BabbageUI
         },
         data () {
             return {

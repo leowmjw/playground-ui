@@ -83,29 +83,91 @@
 
 <template>
 
+    <div class="table-babbage" v-show="tableData.columns.length">
+        <table class="table table-bordered table-condensed">
+            <thead>
+            <tr v-for="header in tableData.headers">
+                <th v-for="col in header">
+                    {{ col }}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="rows in tableData.columns">
+                <td v-for="dimension in rows.dimensions">
+                    {{ dimension.nameValue }}
+                </td>
+                <td v-for="measure in rows.measures" class="numeric">
+                    {{ formatMYR(measure.value) }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-babbage" v-show="tableData.columns.length === undefined || tableData.columns.length === null">
+        <div class="alert alert-info">
+            <strong>You have not selected any data.</strong> Please choose a set of rows
+            and columns to generate a cross-table.
+        </div>
+    </div>
+
 
 </template>
 
 <script>
 
+    import util from 'util'
+    // Actual Component Implementation
+    import TableComponent from './components/table'
 
     export default {
         props: ['cube', 'endpoint'],
         components: {},
         data () {
             return {
-                Char: {
-                    group: ['classification_economic_econ1_label.econ1_label'],
-                    aggregates: 'adjusted.sum'
-                }
+                state: {
+                    group: ["functional_classification_2.Item", "economic_classification_Level_2.Level_2_x_3"]
+                },
+                tableData: null
             }
         },
         watch: {},
         ready () {
+            const endpoint = "http://next.openspending.org/api/3"
+            // const cube = "boost:boost-moldova-2005-2014"
+            const cube = "0638aadc448427e8b617257ad01cd38a:kpkt-propose-2016-hierarchy-test"
+            const state = {
+                // group: ["functional_classification_2.Item", "economic_classification_Level_2.Level_2_x_3"]
+                // group: ["economic_classification_Level_2.Level_2_x_3", "functional_classification_2.Item"]
+                // group: ["economic_classification_Level_2.Level_2_x_3"]
+                group: ["functional_classification_2.Item"],
+                order: [{key: "Amount.sum", direction: 'asc'}]
+            }
 
+
+            const babbageTable = new TableComponent()
+            const p = new Promise(function (resolve, reject) {
+                // DEBUG:
+                // console.error("Calling ENDPOINT %s for CUBE %s with state %s", endpoint, cube, util.inspect(state))
+                babbageTable.getTableData(endpoint, cube, state)
+                        .then(resolve)
+                        .catch(reject)
+            })
+            // Execute promise ..
+            p.then(function (tableData) {
+                        // DEBUG:
+                        // console.error("RESULT: ", util.inspect(tableData, {depth: 10}))
+                        this.tableData = tableData
+                    }.bind(this)
+            )
+        },
+        methods: {
+            formatMYR: function (value) {
+                return new Intl.NumberFormat().format(value)
+            }
         },
         computed: {}
-
     }
 
 </script>

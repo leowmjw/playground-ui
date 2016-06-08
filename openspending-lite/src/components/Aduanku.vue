@@ -1,4 +1,4 @@
-<style>
+<style scoped>
     body {
         font-family: Helvetica Neue, Arial, sans-serif;
         font-size: 14px;
@@ -70,7 +70,7 @@
 </style>
 
 <template>
-    <div class="col-md-6 portfolio-item">
+    <div class="col-md-6 portfolio-item ">
         <!-- Drop down of Authority to select -->
         <!-- For now just list down the important ones .. -->
         <select v-model="current_topic" @change="chooseTopicToShow">

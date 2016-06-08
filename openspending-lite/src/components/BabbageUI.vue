@@ -250,44 +250,34 @@
                 cube="{{cube}}"
                 endpoint="{{apiUrl}}"
         ></pivot-table>
-        -->
 
         <facts
                 cube="{{cube}}"
                 endpoint="{{apiUrl}}"
         ></facts>
+        -->
+
+        <babbage_table
+                cube="{{cube}}"
+                endpoint="{{apiUrl}}"
+        ></babbage_table>
 
     </div>
 </template>
 
 <script>
 
+    import BabbageTable from './BabbageUI/Table.vue'
 
     export default {
         props: [],
-        components: {},
+        components: {
+            babbage_table: BabbageTable
+        },
         data () {
             return {
-                cube: "boost:boost-moldova-2005-2014",
-                apiUrl: "http://next.openspending.org/api/3",
-                Char: {
-                    group: ['classification_economic_econ1_label.econ1_label'],
-                    aggregates: 'adjusted.sum'
-                },
-                MultiChar: {
-                    group: ['classification_economic_econ1_label.econ1_label'],
-                    series: ['classification_administrative_admin1.admin1'],
-                    aggregates: 'adjusted.sum'
-                },
-                Pivot: {
-                    cols: ['administrative_classification_admin1.admin1', 'other_exp_type.exp_type'],
-                    rows: ['classification_economic_econ1_label.econ1_label', 'other_fin_source.fin_source'],
-                    aggregates: 'adjusted.sum'
-                },
-                geo: {
-                    group: ['location.title'],
-                    aggregates: 'adjusted.sum'
-                }
+                cube: "0638aadc448427e8b617257ad01cd38a:kpkt-propose-2016-hierarchy-test",
+                apiUrl: "http://next.openspending.org/api/3"
             }
         },
         watch: {},
