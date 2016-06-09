@@ -3,6 +3,7 @@ import d3 from 'd3'
 import * as Utils from '../utils.js'
 import _ from 'lodash'
 import events from 'events'
+
 var api = new Api();
 
 export class SanKeyChartComponent extends events.EventEmitter {
@@ -17,6 +18,7 @@ export class SanKeyChartComponent extends events.EventEmitter {
     var that = this;
     this.wrapper = wrapper;
 
+    var sankey = null;
     var unit = 15;
     var margin = {top: unit / 2, right: 1, bottom: 6, left: 1};
     var svg = null;
@@ -27,19 +29,18 @@ export class SanKeyChartComponent extends events.EventEmitter {
       height: this.wrapper.clientWidth * 0.6
     };
 
-
     this.emit('beginAggregate', this);
 
     params.group = [params.source, params.target];
-    sourceKey = params.source;
-    targetKey = params.target;
+    var sourceKey = params.source;
+    var targetKey = params.target;
     params.source = undefined;
     params.target = undefined;
 
     params.order = params.order || [
       {key: params.aggregates, direction: 'desc'},
-      {key: params.source, direction: 'asc'},
-      {key: params.target, direction: 'asc'}
+      {key: sourceKey, direction: 'asc'},
+      {key: targetKey, direction: 'asc'}
     ];
 
     params.page = 0;

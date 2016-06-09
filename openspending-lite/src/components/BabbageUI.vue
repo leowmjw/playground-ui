@@ -1,4 +1,28 @@
-<style>
+<style scoped>
+
+    .alert-babbage {
+        overflow-x: scroll;
+        min-height: 25em
+    }
+
+    .alert-babbage::-webkit-scrollbar {
+        -webkit-appearance: none
+    }
+
+    .alert-babbage::-webkit-scrollbar:horizontal {
+        height: 11px
+    }
+
+    .alert-babbage::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: rgba(0, 0, 0, .5)
+    }
+
+    .alert-babbage::-webkit-scrollbar-track {
+        background-color: #fff;
+        border-radius: 8px
+    }
+
     .c3 svg {
         font: 10px sans-serif;
         -webkit-tap-highlight-color: transparent
@@ -190,6 +214,15 @@
         margin-bottom: 20px
     }
 
+    .ng-link {
+        cursor: pointer
+    }
+
+    .ng-icon, .ng-icon:hover {
+        text-decoration: none !important
+    }
+
+
 </style>
 
 <template>
@@ -255,12 +288,17 @@
                 cube="{{cube}}"
                 endpoint="{{apiUrl}}"
         ></facts>
-        -->
 
         <babbage_table
                 cube="{{cube}}"
                 endpoint="{{apiUrl}}"
         ></babbage_table>
+        -->
+        <sankey
+                cube="{{cube}}"
+                endpoint="{{apiUrl}}"
+                sankeyid="kpkt"
+        ></sankey>
 
     </div>
 </template>
@@ -268,21 +306,28 @@
 <script>
 
     import BabbageTable from './BabbageUI/Table.vue'
+    import SanKey from './BabbageUI/SanKey.vue'
 
     export default {
         props: [],
         components: {
-            babbage_table: BabbageTable
+            babbage_table: BabbageTable,
+            sankey: SanKey
         },
         data () {
             return {
+                show: null,
                 cube: "0638aadc448427e8b617257ad01cd38a:kpkt-propose-2016-hierarchy-test",
                 apiUrl: "http://next.openspending.org/api/3"
             }
         },
         watch: {},
         ready () {
+        },
+        methods: {
+            selectDemo: function () {
 
+            }
         },
         computed: {}
 
