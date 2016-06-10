@@ -259,46 +259,44 @@
                 endpoint="{{apiUrl}}"
         ></chart>
 
-        <tree-map
+-->
+        <treemap
                 cube="{{cube}}"
                 endpoint="{{apiUrl}}"
-        ></tree-map>
+                treemapid="kpkt"
+        ></treemap>
+        <!--
+                <bubbletree
+                        cube="{{cube}}"
+                        endpoint="{{apiUrl}}"
+                ></bubbletree>
 
-        <bubbletree
-                cube="{{cube}}"
-                endpoint="{{apiUrl}}"
-        ></bubbletree>
+                <geo-view
+                        cube="{{cube}}"
+                        endpoint="{{apiUrl}}"
+                ></geo-view>
 
-        <geo-view
-                cube="{{cube}}"
-                endpoint="{{apiUrl}}"
-        ></geo-view>
+                <babbage-table
+                        cube="{{cube}}"
+                        endpoint="{{apiUrl}}"
+                ></babbage-table>
 
-        <babbage-table
-                cube="{{cube}}"
-                endpoint="{{apiUrl}}"
-        ></babbage-table>
+                <pivot-table
+                        cube="{{cube}}"
+                        endpoint="{{apiUrl}}"
+                ></pivot-table>
 
-        <pivot-table
-                cube="{{cube}}"
-                endpoint="{{apiUrl}}"
-        ></pivot-table>
+                <facts
+                        cube="{{cube}}"
+                        endpoint="{{apiUrl}}"
+                ></facts>
 
-        <facts
-                cube="{{cube}}"
-                endpoint="{{apiUrl}}"
-        ></facts>
-
-        <babbage_table
-                cube="{{cube}}"
-                endpoint="{{apiUrl}}"
-        ></babbage_table>
-        -->
-        <sankey
-                cube="{{cube}}"
-                endpoint="{{apiUrl}}"
-                sankeyid="kpkt"
-        ></sankey>
+                <sankey
+                        cube="{{cube}}"
+                        endpoint="{{apiUrl}}"
+                        sankeyid="kpkt"
+                ></sankey>
+                -->
 
     </div>
 </template>
@@ -307,12 +305,14 @@
 
     import BabbageTable from './BabbageUI/Table.vue'
     import SanKey from './BabbageUI/SanKey.vue'
+    import TreeMap from './BabbageUI/TreeMap.vue'
 
     export default {
         props: [],
         components: {
             babbage_table: BabbageTable,
-            sankey: SanKey
+            sankey: SanKey,
+            treemap: TreeMap
         },
         data () {
             return {
