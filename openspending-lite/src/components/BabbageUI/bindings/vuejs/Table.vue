@@ -119,7 +119,7 @@
 
     import util from 'util'
     // Actual Component Implementation
-    import TableComponent from './components/table'
+    import TableComponent from '../../components/table'
 
     export default {
         props: ['cube', 'endpoint'],

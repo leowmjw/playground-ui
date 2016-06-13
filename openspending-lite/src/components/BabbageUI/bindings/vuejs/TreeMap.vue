@@ -76,7 +76,7 @@
 
     import util from 'util'
     // Actual component below ... as an emitter object
-    import TreeMapComponent from './components/treemap'
+    import TreeMapComponent from '../../components/treemap'
 
     export default {
         props: ['cube', 'endpoint', 'treemapid'],

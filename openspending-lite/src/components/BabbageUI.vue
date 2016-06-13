@@ -228,6 +228,9 @@
 <template>
 
     <div>
+        <topbar></topbar>
+    </div>
+    <div>
         <!--
         <pie-chart
                 cube="{{cube}}"
@@ -259,13 +262,11 @@
                 endpoint="{{apiUrl}}"
         ></chart>
 
--->
         <treemap
                 cube="{{cube}}"
                 endpoint="{{apiUrl}}"
                 treemapid="kpkt"
         ></treemap>
-        <!--
                 <bubbletree
                         cube="{{cube}}"
                         endpoint="{{apiUrl}}"
@@ -285,11 +286,13 @@
                         cube="{{cube}}"
                         endpoint="{{apiUrl}}"
                 ></pivot-table>
+-->
 
-                <facts
-                        cube="{{cube}}"
-                        endpoint="{{apiUrl}}"
-                ></facts>
+        <facts
+                cube="{{cube}}"
+                endpoint="{{apiUrl}}"
+        ></facts>
+        <!--
 
                 <sankey
                         cube="{{cube}}"
@@ -303,29 +306,174 @@
 
 <script>
 
-    import BabbageTable from './BabbageUI/Table.vue'
-    import SanKey from './BabbageUI/SanKey.vue'
-    import TreeMap from './BabbageUI/TreeMap.vue'
+    import BabbageTable from './BabbageUI/bindings/vuejs/Table.vue'
+    import SanKey from './BabbageUI/bindings/vuejs/SanKey.vue'
+    import TreeMap from './BabbageUI/bindings/vuejs/TreeMap.vue'
+    import Facts from './BabbageUI/bindings/vuejs/Facts.vue'
+    import TopBar from './BabbageUI/TopBar.vue'
 
     export default {
         props: [],
         components: {
             babbage_table: BabbageTable,
             sankey: SanKey,
-            treemap: TreeMap
+            treemap: TreeMap,
+            facts: Facts,
+            topbar: TopBar
         },
         data () {
             return {
                 show: null,
                 cube: "0638aadc448427e8b617257ad01cd38a:kpkt-propose-2016-hierarchy-test",
-                apiUrl: "http://next.openspending.org/api/3"
+                apiUrl: "http://next.openspending.org/api/3",
+                state: {
+                    // Below for babbageParams??
+                    babbage: null,
+                    selectedVisualizations: null,
+                    dimensions: {
+                        current: {
+                            columns: null,
+                            filters: null,
+                            groups: null,
+                            row: null,
+                            series: null
+                        },
+                        items: null
+                    },
+                    measures: {
+                        current: null,
+                        items: null
+                    },
+                    orderBy: null
+                }
             }
         },
-        watch: {},
+        watch: {
+            'state.selectedVisualizations': {
+                handler: function (val, oldVal) { /* ... */
+                },
+                deep: true
+            },
+            'state.dimensions.current.groups': function (val) {
+
+            },
+            'state.measures.current': function (val) {
+
+            }
+        },
+        events: {
+            'ping-parent': function () {
+                console.error("PING-PARENT!!!")
+                this.$broadcast('dispatch-from-parent')
+            },
+            'bubbletree-click': function () {
+                console.error("BUBBLETREE-CLICK!!")
+            },
+            'treemap-click': function () {
+                console.error("TREEMAP-CLICK!!!")
+            },
+            clickBreadcrumb: function (breadcrumb) {
+
+            },
+            changePackage: function (searchPackage, packageInfo) {
+
+            },
+            changeMeasure: function (measure) {
+
+            },
+            findDimension: function (key) {
+                // Could be method / util
+
+            },
+            getFilters: function () {
+                // Could be method / util
+
+            },
+            toggleOrderBy: function (key, direction, updateViews) {
+                // Could be method / util
+
+            },
+            isGroupSelected: function (key) {
+
+            },
+            isFilterSelected: function (key) {
+
+            },
+            getSelectedValue: function (dimension) {
+
+            },
+            changeGroup: function (group, dropFilters) {
+
+            },
+            changeFilter: function (filter, value) {
+
+            },
+            dropFilter: function (filter) {
+
+            },
+            dropAllFilters: function () {
+
+            },
+            changePivot: function (axis, dimension, replace) {
+
+            },
+            dropPivot: function (axis, dimension, clear) {
+
+            },
+            canBack: function () {
+
+            },
+            canForward: function () {
+
+            },
+            back: function () {
+
+            },
+            forward: function () {
+
+            },
+            '$locationChangeSuccess': function () {
+                // What is this?? UNKNOWN
+            }
+        },
         ready () {
         },
         methods: {
             selectDemo: function () {
+
+            },
+            updateBabbage: function () {
+                // call Utils.prepareBabbageParams
+                // call updateBreadCrumbs
+                // call refreshBabbageComponents
+
+            },
+            changePackage: function (searchPackage, defaultParams) {
+
+            },
+            chooseStateParams: function (defaultParams) {
+
+            },
+            setState: function (state) {
+
+            },
+            refreshBabbageComponents: function () {
+                // Maybe: http://stackoverflow.com/questions/34255351/is-there-a-version-of-settimeout-that-returns-an-es6-promise
+                // why??
+                // changes state.flag.renderingCharts
+                // Promise within promise ??
+                // Requeueing as per: http://stackoverflow.com/questions/779379/why-is-settimeoutfn-0-sometimes-useful
+            },
+            drillDown: function (value) {
+
+            },
+            lazyLoadDimensionValues: function (dimension) {
+
+            },
+            lazyLoadManyDimensionValues: function (dimension) {
+
+            },
+            updateBreadCrumbs: function () {
 
             }
         },

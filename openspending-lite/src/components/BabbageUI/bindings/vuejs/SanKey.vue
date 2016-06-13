@@ -48,7 +48,7 @@
 <script>
     import util from 'util'
     // Get the actual component implementation ..
-    import SanKeyChartComponent from './components/sankey'
+    import SanKeyChartComponent from '../../components/sankey'
 
     export default {
         props: ['cube', 'endpoint', 'sankeyid'],
