@@ -47,7 +47,7 @@ const repoArangoDB = stampit
 
                     this.dbconn.query(aql_query, bind_vars, options).then(
                         cursor => {
-                            this.log("%s result(s) returned!!", cursor.count)
+                            // this.log("%s result(s) returned!!", cursor.count)
                             // self.result = cursor.count
                             return cursor.all()
                         },

@@ -4,16 +4,21 @@
   "author": "Michael Leow <leow@sinarproject.org>",
   "private": true,
   "scripts": {
-    "b": "./node_modules/.bin/babel-node poc.js",
+    "b": "./node_modules/.bin/babel-node ./src/findinpopit.js",
     "e": "babel-watch ./src/poc.js",
+    "f": "babel-watch ./src/findinpopit.js",
     "dev": "webpack-dev-server --inline --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
     "arangojs": "^4.3.0",
+    "fuzzysearch": "^1.0.3",
+    "papaparse": "^4.1.2",
+    "string_utils": "^1.0.6",
     "superagent": "^2.0.0",
     "superagent-promise": "^1.1.0",
-    "vue": "^1.0.0"
+    "vue": "^1.0.0",
+    "wuzzy": "^0.1.2"
   },
   "devDependencies": {
     "babel-cli": "^6.8.0",
