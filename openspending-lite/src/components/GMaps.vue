@@ -1,4 +1,4 @@
-<style>
+<style scoped>
     .row {
         margin: 24px;
     }
@@ -22,29 +22,29 @@
 <template>
 
     <div class="row">
-        <div>
-            <!--
-            <div class="placeholder">
-                <input type="text" v-model="searcharea"
-                       @change="displayAreaByID | debounce 300"
-                       placeholder="Display Map of Area by ID (P001, P222) .."
-                       disabled
-                >
-            </div>
-            -->
-            <div>
-                <div class="row">
-                    <!--
-                    Lat: {{ location_marker.lat }},
-                    Lng: {{ location_marker.lng }}<br/>
-                    -->
-                    <showtheway :mylat="location_marker.lat" :mylng="location_marker.lng"></showtheway>
-                </div>
-            </div>
-        </div>
-        <div class="span11">
+        <div >
             <div class="popin">
                 <div id="map-{{ mapid }}" class="map"></div>
+            </div>
+            <div>
+                <!--
+                <div class="placeholder">
+                    <input type="text" v-model="searcharea"
+                           @change="displayAreaByID | debounce 300"
+                           placeholder="Display Map of Area by ID (P001, P222) .."
+                           disabled
+                    >
+                </div>
+                -->
+                <div>
+                    <div class="row">
+                        <!--
+                        Lat: {{ location_marker.lat }},
+                        Lng: {{ location_marker.lng }}<br/>
+                        -->
+                        <showtheway :mylat="location_marker.lat" :mylng="location_marker.lng"></showtheway>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

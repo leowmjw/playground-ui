@@ -35,6 +35,14 @@ const osViewerService = {
 
     },
     buildState: function (packageName, options) {
+        console.error("IN buildState")
+        // use the api lib ..
+        //       return api.getDataPackageModel(packageName)
+        //          //init measures
+        //        result.measures.items = api.getMeasuresFromModel(model);
+        //        result.measures.current = (_.first(result.measures.items)).key;
+        // Now build the heirarchy
+        // Ignore dimensions if can ..
 
     },
     getPackageInfo: function (packageName) {

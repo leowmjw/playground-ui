@@ -4,6 +4,66 @@
 
 <template>
 
+    <div class="table-babbage" v-show="tableData.columns.length">
+        <table class="table table-bordered table-condensed">
+            <thead>
+            <tr>
+                <template v-for="header in tableData.headers">
+                    <th class="title">
+                        {{ header.label }}
+                    </th>
+                    <th class="operations">
+                        <span v-if="getSort(header.key).direction" class="ng-link" @click="executeSort(header.key)">
+                            <i class="fa"
+                               :class="{
+                                    fa-sort-desc: getSort(header.key).direction == 'desc',
+                                    fa-sort-asc: getSort(header.key).direction == 'asc'
+                               }"></i>
+                        </span>
+                        <span v-else @click="executeSort(header.key)">
+                            <i class="fa fa-sort">x</i>
+                        </span>
+                    </th>
+                </template>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="rows in tableData.columns">
+                <td v-for="row in rows track by $index" colspan="2"
+                    :class="{'numeric': tableData.headers[$index].numeric}">
+                <span v-if="tableData.headers[$index].numeric">
+                    {{ row | formatMYR }}
+                </span>
+                <span v-else>
+                    {{ row }}
+                </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="pager">
+            <ul v-show="showPager" class="pagination pagination-sm">
+                <li :class="{'disabled': !hasPrev}">
+                    <a class="ng-link" @click="setPage(current - 1)">&laquo;</a>
+                </li>
+                <li v-for="page in pages" :class="{'active': page.current}">
+                    <a class="ng-link" @click="setPage(page.page)">{{page.page + 1}}</a>
+                </li>
+                <li :class="{'disabled': !hasNext}">
+                    <a class="ng-link" @click="setPage(current + 1)">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="alert-babbage">
+        <div class="alert alert-info">
+            <strong>You have not selected any data.</strong> Please choose a set of rows
+            and columns to generate a cross-table.
+        </div>
+    </div>
+
+
     <button @click="this.$dispatch('ping-parent')">Send To BabbageUI</button>
 
 </template>
@@ -34,6 +94,10 @@
                         direction: null
                     },
                     page: null
+                },
+                header: {
+                    key: null,
+                    label: null
                 }
             }
         },
@@ -53,18 +117,22 @@
                 // Are any of these needed??
                 aggregates: "Amount.sum",
                 // Top Level
-                group: ["economic_classification_Top_x.Top_Level_x_1"]
+                // group: ["economic_classification_Top_x.Top_Level_x_1"],
+                // group: ["functional_classification_2.Item"],
                 // If order is missing; is it ok??
                 //        {key: params.aggregates, direction: 'desc'},
                 //        {key: params.source, direction: 'asc'},
                 //        {key: params.target, direction: 'asc'}
-
+                // order: [{key: "Amount.sum", direction: 'asc'}]
             }
             // TODO: Test below in next iteration
-            // this.facts = new FactsComponent()
-            // this.update()
+            this.facts = new FactsComponent()
+            this.update()
         },
         methods: {
+            formatMYR: function (value) {
+                return new Intl.NumberFormat().format(value)
+            },
             update: function () {
                 const p = new Promise(
                         function (resolve, reject) {
@@ -73,6 +141,7 @@
                                     .catch(reject)
                         }.bind(this)
                 ).then(function (tableData) {
+                            console.error("DATA:", util.inspect(tableData, {depth: 10}))
                             // Strating state calculations
                             this.tableData = tableData
                             this.current = parseInt(tableData.info.page - 1, 10) || 0
@@ -111,12 +180,23 @@
                         }.bind(this)
                 )
             },
+            hasSort: function (field) {
+                // If not; UI will have deffault behavioor
+            },
+            executeSort: function (field) {
+                // set the sort directinon
+                // assumes has direction??
+                console.error("SORTING: ", field)
+            },
             getSort: function (field) {
                 //               return _.find($scope.state.order, {key: field});
                 // TODO: How to port above to ES6??
                 const result = state.order.find(function (element, index, array) {
                     // {key: field}
+                    console.error("EL: %s F: %s", util.inspect(element), field)
                 })
+                // Hard code it to unsorted for now ..
+                return null
 
             },
             setSort: function (key, direction) {

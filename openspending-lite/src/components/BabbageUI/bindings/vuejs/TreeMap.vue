@@ -131,6 +131,10 @@
                 //        {key: params.source, direction: 'asc'},
                 //        {key: params.target, direction: 'asc'}
                 // order: [{key: "Amount.sum", direction: 'asc'}]
+
+                // filter === cut ..
+                // Object; each key/value separated by |
+                // key: [value]
             }
 
             const treeMap = new TreeMapComponent()

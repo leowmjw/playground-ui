@@ -228,7 +228,11 @@
 <template>
 
     <div>
-        <topbar></topbar>
+        <babbage_package
+                cube="{{cube}}"
+                endpoint="{{apiUrl}}"
+                type="drilldown">
+        </babbage_package>
     </div>
     <div>
         <!--
@@ -261,12 +265,14 @@
                 type="line"
                 endpoint="{{apiUrl}}"
         ></chart>
-
+-->
         <treemap
                 cube="{{cube}}"
                 endpoint="{{apiUrl}}"
                 treemapid="kpkt"
         ></treemap>
+
+        <!--
                 <bubbletree
                         cube="{{cube}}"
                         endpoint="{{apiUrl}}"
@@ -310,7 +316,7 @@
     import SanKey from './BabbageUI/bindings/vuejs/SanKey.vue'
     import TreeMap from './BabbageUI/bindings/vuejs/TreeMap.vue'
     import Facts from './BabbageUI/bindings/vuejs/Facts.vue'
-    import TopBar from './BabbageUI/TopBar.vue'
+    import BabbagePackage from './BabbageUI/BabbagePackage.vue'
 
     export default {
         props: [],
@@ -319,7 +325,7 @@
             sankey: SanKey,
             treemap: TreeMap,
             facts: Facts,
-            topbar: TopBar
+            babbage_package: BabbagePackage
         },
         data () {
             return {
@@ -364,7 +370,7 @@
         events: {
             'ping-parent': function () {
                 console.error("PING-PARENT!!!")
-                this.$broadcast('dispatch-from-parent')
+                this.$broadcast('dispatch-from-parent', 'hi!!')
             },
             'bubbletree-click': function () {
                 console.error("BUBBLETREE-CLICK!!")
