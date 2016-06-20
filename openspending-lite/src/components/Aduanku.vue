@@ -70,7 +70,6 @@
 </style>
 
 <template>
-    <h3>{{ hasMapLoaded }}, {{ loadDetailsOnce }}</h3>
     <div class="col-md-6 portfolio-item" v-show="isShowResult">
         <!-- Drop down of Authority to select -->
         <!-- For now just list down the important ones .. -->
@@ -182,11 +181,7 @@
             }
         },
         watch: {},
-        events: {
-            'finish-map-setup2': function () {
-                console.error("CATCAH: finish-map-setup")
-            }
-        },
+        events: {},
         ready () {
             // Debug:
             // console.error("Ready ..")
@@ -225,49 +220,33 @@
                 )
             },
             updateCurrentIssueLocation: function (data) {
-                // Set the status for View to be updated
+                // Set the status for View to be updated; need to do this as early as possible; otherwise the rest does not work!
                 this.isShowResult = false
                 // console.error("DATA:", data)
-                // Define the function to bw used ..
-                const getLocation = function (data) {
-                    // DEBUG:
-                    console.error("LAT: %s LNG: %s", data.lat[0], data.long[0])
-                    const p = Utils.whichPARIsPointIn(data)
-                    // Get out the area ID from here ...
-                    // Further checks to make sure it is not empty?? .. maybe ..
-                    p.then(
-                            function (value) {
-                                // All OK; then update the internal View Status
-                                this.current_issue_location.lat = data.lat[0]
-                                this.current_issue_location.lng = data.long[0]
-                                // should trigger the $watch for lat ..
-                                // OK; value == Area ID
-                                console.error("AduankuVAL:", value)
-                                this.selectedarea = value
-                                // NOTE: Behavior below removed cause result is hidden when clicked :P
-                                // Visually; slect gmaps with class "portfolio-item" marked up
-                                // const issue_gmaps = document.querySelector("div#map-aduanku")
-                                // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-                                // issue_gmaps.scrollIntoView()
-                            }.bind(this)
-                    ).catch(
-                            function (err) {
-                                console.error(util.inspect(err))
-                            }
-                    )
-                }.bind(this)
+                // Bind the context here; to be used based on whether it is the find time loaded
+                const getLocation = Utils.getLocation.bind(this)
 
                 if (this.hasMapLoaded === false) {
                     this.$on('finish-map-setup', function () {
-                        // Call immediately once a map has been loaded ..
-                        console.error("CATCAH: finish-map-setup")
-                        console.error("DEFERRED getLocation!!!")
+                        // DEBUG:
+                        // console.error("CATCAH: finish-map-setup")
+                        // console.error("DEFERRED getLocation!!!")
                         getLocation(this)
+                        // NOTE: Behavior below removed cause result is hidden when clicked :P
+                        // Visually; slect gmaps with class "portfolio-item" marked up
+                        const issue_gmaps = document.querySelector("div#map-aduanku")
+                        // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+                        issue_gmaps.scrollIntoView()
                     }.bind(data))
                 } else {
                     // Call immediately once a map has been loaded ..
-                    console.error("NORMAL getLocation!!!")
+                    // console.error("NORMAL getLocation!!!")
                     getLocation(data)
+                    // NOTE: Behavior below removed cause result is hidden when clicked :P
+                    // Visually; slect gmaps with class "portfolio-item" marked up
+                    const issue_gmaps = document.querySelector("div#map-aduanku")
+                    // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+                    issue_gmaps.scrollIntoView()
                 }
             },
             backToResults: function () {
@@ -280,6 +259,7 @@
                 return `${this.current_issue_location.lat},${this.current_issue_location.lng}`
             },
             loadDetailsOnce: function () {
+                // Use this to load GMaps only once; after that just show/hide
                 if (this.hasMapLoaded === false) {
                     // Now has show details the first time
                     if (this.isShowResult === false) {
