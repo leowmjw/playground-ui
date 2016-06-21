@@ -4,10 +4,218 @@ import util from 'util'
 import config from './config'
 import repoArangoDB from './libs/repo-arangodb'
 import TableComponent from './components/BabbageUI/components/table'
+import {Api} from './components/BabbageUI/api/index'
+
+const api = new Api()
 
 //
 // Execute via babel-node
-scenario_babbageui_table_component()
+// scenario_babbageui_table_component()
+// scenario_dimension_hiearachy()
+scenario_dimension_hiearachy_promise_all()
+
+function scenario_dimension_hiearachy_promise_all() {
+
+    // filters will be appended; becomes the breadcrumb ..
+    const connection = {
+        cube: "0638aadc448427e8b617257ad01cd38a:kpkt-propose-2016-hierarchy-test",
+        endpoint: "http://next.openspending.org/api/3"
+    }
+
+    let mypro = []
+
+    const r = new Promise(function (resolve, reject) {
+
+        const p = api.getPackageModel(connection.endpoint, connection.cube)
+        p.then(
+            (model) => {
+                resolve(model.hierarchies)
+            }
+        ).catch(
+            (err) => {
+                reject("ERR:", err)
+            }
+        )
+    })
+
+    mypro.push(r)
+
+    const q = new Promise(function (resolve, reject) {
+        const p = api.getMeasures(connection.endpoint, connection.cube)
+        p.then(
+            (measures) => {
+                resolve(measures)
+            }
+        ).catch(
+            (err) => {
+                reject("ERR:", err)
+            }
+        )
+    })
+
+    mypro.push(q)
+
+    const p = new Promise(function (resolve, reject) {
+        const p1 = api.getDimensions(connection.endpoint, connection.cube)
+        p1.then(
+            (dimensions) => {
+                resolve(dimensions)
+            })
+            .catch(
+                (err) => {
+                    reject("ERR:", err)
+                }
+            )
+    })
+
+    /* NOTE: Promise.all without new!!
+
+    const n = new Promise(function (resolve, reject) {
+        const p1 = api.getDimensions(connection.endpoint, connection.cube)
+        p1.then(
+            (results) => {
+                let promises = []
+                for (let singleDimension of results) {
+                    const myq = api.getDimensionMembers(connection.endpoint, connection.cube, singleDimension.key)
+                    promises.push(myq)
+                }
+                const p2 = Promise.all(promises)
+                p2.then(
+                    (result) => {
+                        console.log("DONE!!!", util.inspect(result))
+                    },
+                    (err) => {
+                        console.log("ERR:", util.inspect(err))
+                    }
+                )
+            }
+        ).catch(
+            (err) => {
+                reject("ERRp1:", util.inspect(err, {depth: 10}))
+            }
+        )
+    })
+    */
+
+    mypro.push(p)
+
+    const o = Promise.all(mypro)
+    o.then(
+        (values) => {
+            console.log("ALL:", util.inspect(values, {depth: 10}))
+        }
+    ).catch(
+        (err) => {
+            console.error("ERR:", err)
+        }
+    )
+
+}
+
+function scenario_dimension_hiearachy() {
+    /*
+     Hierarchy the next drillDown will be known
+
+     in getDimensions
+     KEY: budget_line_id_2.UUID DRILL: undefined
+     KEY: date_2.Year DRILL: undefined
+     KEY: economic_classification_Level.Level_1_x_2 DRILL: economic_classification_Level_2.Level_2_x_3
+     KEY: economic_classification_Level_2.Level_2_x_3 DRILL: economic_classification_Level_3.Level_3_x_4
+     KEY: economic_classification_Level_3.Level_3_x_4 DRILL: undefined
+     KEY: economic_classification_Top_x.Top_Level_x_1 DRILL: economic_classification_Level.Level_1_x_2
+     KEY: functional_classification_2.Item DRILL: undefined
+
+     */
+
+    // filters will be appended; becomes the breadcrumb ..
+    const connection = {
+        cube: "0638aadc448427e8b617257ad01cd38a:kpkt-propose-2016-hierarchy-test",
+        endpoint: "http://next.openspending.org/api/3"
+    }
+
+    const options = {}
+
+    buildStatefunction(connection, options)
+
+    function buildStatefunction(connection, options) {
+        options = options || {}
+        let model = null
+
+        console.error("IN buildState")
+
+        const r = api.getPackageModel(connection.endpoint, connection.cube)
+        r.then(
+            (model) => {
+                console.log("XXXXXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXX")
+                // console.log("getPackageModel:", util.inspect(model, {depth: 10}))
+                for (let key of Object.keys(model.hierarchies)) {
+                    console.log("Default Selection: ", util.inspect(model.hierarchies[key].levels[0], {depth: 10}))
+                    break
+                }
+                console.log("XXXXXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXX")
+            }
+        ).catch(
+            (err) => {
+                console.error("ERR:", err)
+            }
+        )
+
+        const q = api.getMeasures(connection.endpoint, connection.cube)
+        q.then(
+            (results) => {
+                console.log("********************************************")
+                console.log("getMeasures: ", util.inspect(results, {depth: 10}))
+                console.log("********************************************")
+            }
+        ).catch(
+            (err) => {
+                console.error("ERR:", err)
+            }
+        )
+
+        const p = api.getDimensions(connection.endpoint, connection.cube)
+        p.then(
+            (results) => {
+                console.log("+++++++================================================++++++++++")
+                console.log("VAL_buildStatefunction", util.inspect(results, {depth: 10}))
+                for (let singleDimension of results) {
+                    console.log("KEY: %s DRILL: %s", singleDimension.key, singleDimension.drillDown)
+                    const p1 = api.getDimensionMembers(connection.endpoint, connection.cube, singleDimension.key)
+                    p1.then(
+                        (members) => {
+                            console.log("MEMBERS of %s : %s", singleDimension.key, util.inspect(members, {depth: 10}))
+                            console.log("+++++++================================================++++++++++")
+                        }
+                    )
+                }
+            }
+        ).catch(
+            (err) => {
+                console.error("ERR:", err)
+            }
+        )
+
+        /* Below implemented in getDimneison already!!
+         return api.getPackageModel(connection.endpoint, connection.cube)
+         .then((model) => {
+         console.error("getPackageModel:", util.inspect(model))
+         return api.getDimensionsFromModel(model)
+         })
+         .then((result) => {
+
+         })
+         */
+
+        // use the api lib ..
+        //       return api.getDataPackageModel(packageName)
+        //          //init measures
+        //        result.measures.items = api.getMeasuresFromModel(model);
+        //        result.measures.current = (_.first(result.measures.items)).key;
+        // Now build the heirarchy
+        // Ignore dimensions if can ..
+
+    }
+}
 
 function scenario_babbageui_table_component() {
 

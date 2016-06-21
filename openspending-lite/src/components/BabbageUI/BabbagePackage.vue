@@ -23,7 +23,7 @@
     // with links to get us elsewhere ... to OSNext ..
 
     export default {
-        props: ['cube', 'endpoint', 'type', 'packageid', 'initstate'],
+        props: ['cube', 'endpoint', 'type', 'packageid', 'initstate', 'params'],
         components: {
             measures: Measures
         },
@@ -34,6 +34,10 @@
                     babbage: null,
                     flag: null,
                     selectedVisualizations: null,
+                    hierarchies: {
+                        current: null,
+                        items: null
+                    },
                     dimensions: {
                         current: {
                             columns: null,
@@ -68,31 +72,55 @@
             }
         },
         ready () {
-            // Form the hierarchy here ....
+            // Return the Hierarchy Available with Labels; and the Top Level Reference
+            // along with all the Dimensions with their Drill Down ..
+            /*
+             {
+             hierarchies: <All Hierarchies with Keys>
+             measures: ..
+             dimensions: <ALL Dimensions with DrillDowns>
+             }
+             */
+            // console.error("ready: cube: %s endpoint: %s type: %s", this.cube, this.endpoint, this.type)
+            // Atatch it to babbage; which is a prepped representative of its overall mapping ??
+            const mypro = Model.buildState({cube: this.cube, endpoint: this.endpoint}, {})
 
-            // Start with packageid
-            // If not valid; do something?? simeple validation ...
-            // NOTE: packageid === cube!! See Table COmponet ..
-            // Should there be a default cube?
-            // Maybe at the higher level; BabbageUI based on the authority/org??
-
-            Model.buildState(this.cube, {})
+            const o = Promise.all(mypro)
+            o.then(
+                    function (values) {
+                        console.error("ALL:", util.inspect(values, {depth: 10}))
+                        // this.babbage = values
+                    }
+            ).catch(
+                    function (err) {
+                        console.error("ERR:", util.inspect(err))
+                    }
+            )
 
             // If has initstate; do something about it .. merge via Object.assign??
             // params below generated form URL?  filters === cut??
-            this.chooseStateParams({})
+            this.chooseStateParams(this.params)
 
             // Set the currents; dupe here??
 
+            // Pass to the component; one time?
+
         },
         methods: {
-            changeVisualization: function() {
+            changeVisualization: function () {
                 Utils.prepareBabbageParams()
                 // Change the v-if
                 // and render the items? with the right template and right props
             },
             chooseStateParams: function (defaultParams) {
-                // Choose the defaults ..
+                // if have defaultParams; extract those and set in the DATA set
+                if (defaultParams == null || defaultParams == undefined) {
+                    // Nothign passed; so that the babage overall and select
+
+                } else {
+                    // set the current state using the passed defaultParams
+                }
+                // else Choose the defaults ..
                 // Set the currents ..
 
                 // Finally
@@ -101,6 +129,12 @@
 
             },
             drillDown: function (value) {
+
+                // Optional; check if it is found in the original model structure
+
+                // append value to the current dimension label; add to filter to cut
+
+                // trigger refresh .. of state to pass into component; trigger watch changes??
 
             },
             refreshBabbageComponents: function () {

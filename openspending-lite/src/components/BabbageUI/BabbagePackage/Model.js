@@ -3,6 +3,7 @@
  */
 "use strict"
 
+import util from 'util'
 import {Api} from '../api/index'
 
 const api = new Api()
@@ -34,15 +35,64 @@ const osViewerService = {
     lazyLoadDimensionValues: function (dimension, packageName) {
 
     },
-    buildState: function (packageName, options) {
-        console.error("IN buildState")
-        // use the api lib ..
-        //       return api.getDataPackageModel(packageName)
-        //          //init measures
-        //        result.measures.items = api.getMeasuresFromModel(model);
-        //        result.measures.current = (_.first(result.measures.items)).key;
-        // Now build the heirarchy
-        // Ignore dimensions if can ..
+    buildState: function (connection, options) {
+        // init ..
+        options = options || {}
+        let model = null
+
+        // DEBUG:
+        // console.error("IN buildState, cube: %s, endpoint: %s", connection.cube, connection.endpoint)
+
+        let mypro = []
+
+        // Build Hierarchy
+        const r = new Promise(function (resolve, reject) {
+
+            const p = api.getPackageModel(connection.endpoint, connection.cube)
+            p.then(
+                (model) => {
+                    resolve(model.hierarchies)
+                }
+            ).catch(
+                (err) => {
+                    reject("ERR_getPackageModel:", util.inspect(err))
+                }
+            )
+        })
+        mypro.push(r)
+
+        // Build Measures
+        const q = new Promise(function (resolve, reject) {
+            const p = api.getMeasures(connection.endpoint, connection.cube)
+            p.then(
+                (measures) => {
+                    resolve(measures)
+                }
+            ).catch(
+                (err) => {
+                    reject("ERR_getMeasures:", err)
+                }
+            )
+        })
+        mypro.push(q)
+
+        // Build Dimensions
+        const p = new Promise(function (resolve, reject) {
+            const p1 = api.getDimensions(connection.endpoint, connection.cube)
+            p1.then(
+                (dimensions) => {
+                    resolve(dimensions)
+                })
+                .catch(
+                    (err) => {
+                        reject("ERR_getDimensions:", err)
+                    }
+                )
+        })
+        mypro.push(p)
+
+        // console.error(mypro)
+        return mypro
 
     },
     getPackageInfo: function (packageName) {

@@ -228,9 +228,10 @@
 <template>
 
     <div>
+        <h2>{{ cube }}, {{ apiUrl }}</h2>
         <babbage_package
-                cube="{{cube}}"
-                endpoint="{{apiUrl}}"
+                :cube="cube"
+                :endpoint="apiUrl"
                 type="drilldown">
         </babbage_package>
     </div>
@@ -265,14 +266,12 @@
                 type="line"
                 endpoint="{{apiUrl}}"
         ></chart>
--->
         <treemap
                 cube="{{cube}}"
                 endpoint="{{apiUrl}}"
                 treemapid="kpkt"
         ></treemap>
 
-        <!--
                 <bubbletree
                         cube="{{cube}}"
                         endpoint="{{apiUrl}}"
@@ -292,13 +291,11 @@
                         cube="{{cube}}"
                         endpoint="{{apiUrl}}"
                 ></pivot-table>
--->
 
         <facts
                 cube="{{cube}}"
                 endpoint="{{apiUrl}}"
         ></facts>
-        <!--
 
                 <sankey
                         cube="{{cube}}"
