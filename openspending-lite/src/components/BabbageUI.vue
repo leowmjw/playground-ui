@@ -230,6 +230,7 @@
     <div>
         <h2>{{ cube }}, {{ apiUrl }}</h2>
         <babbage_package
+                packageid="kpkt"
                 :cube="cube"
                 :endpoint="apiUrl"
                 type="drilldown">

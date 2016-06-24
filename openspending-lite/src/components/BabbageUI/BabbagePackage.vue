@@ -6,6 +6,11 @@
 <template>
 
     <measures></measures>
+    <treemap
+            :treemapid="packageid"
+            :cube="cube"
+            :endpoint="endpoint"
+    ></treemap>
 
 </template>
 
@@ -17,15 +22,17 @@
     import Model from './BabbagePackage/Model'
     // Subcomponents inside ..
     import Measures from './fragments/Measures.vue'
+    import TreeMap from './bindings/vuejs/TreeMap.vue'
 
     // NOTE: We will only support drilldown types
     // TreeMap + BubbleTree??
     // with links to get us elsewhere ... to OSNext ..
 
     export default {
-        props: ['cube', 'endpoint', 'type', 'packageid', 'initstate', 'params'],
+        props: ['cube', 'endpoint', 'type', 'packageid', 'params'],
         components: {
-            measures: Measures
+            measures: Measures,
+            treemap: TreeMap
         },
         data () {
             return {
@@ -54,16 +61,22 @@
                     },
                     filters: null,
                     orderBy: null
+                },
+                initstate: {
+                    aggregates: null,
+                    group: null,
+                    filter: [],
+                    drillDown: null
                 }
             }
         },
         watch: {},
         events: {
-            'treemap-click': function () {
+            'treemap-click': function (chosen_key) {
                 console.error("TREEMAP-CLICK!!!")
                 // Call the Drilldown method now ...
                 // Extract out the key??
-                this.drillDown("")
+                this.drillDown(chosen_key)
             },
             'dispatch-from-parent': function (msg) {
                 console.error("GOT MESSAGE FROM PARENT!!", msg)
@@ -88,22 +101,49 @@
             const o = Promise.all(mypro)
             o.then(
                     function (values) {
-                        console.error("ALL:", util.inspect(values, {depth: 10}))
+                        // DEBUG:
+                        // console.error("ALL:", util.inspect(values, {depth: 10}))
                         // this.babbage = values
-                    }
+                        // Attach to the items; use spread method ..
+                        let [ hierarchies, measures, dimensions ]  =  values
+                        // console.error("ORIG_HIERARCHIES:", util.inspect(Object.assign({}, hierarchies), {depth: 10}))
+                        this.state.hierarchies.items = hierarchies
+                        // console.error("HIERARCHIES:", util.inspect(this.state.hierarchies.items, {depth: 10}))
+                        this.state.measures.items = measures
+                        // console.error("MEASURES:", util.inspect(this.state.measures.items, {depth: 10}))
+                        // this.state.dimensions.items = JSON.stringify(dimensions)
+                        this.state.dimensions.items = dimensions
+                        // console.error("DIMENSIONS:", util.inspect(this.state.dimensions.items, {depth: 10}))
+                        /*
+                         this.state.hierarchies.items = values[0]
+                         this.state.measures.items = values[1]
+                         this.state.dimensions.items = []
+                         console.error("TYPE: %s STRUCT: %s", typeof(this.state.hierarchies.items), util.inspect(values, {depth:10}))
+                         */
+                        // [this.state.hierarchies.items, this.state.measures.items, this.state.dimensions.items] = values
+
+                        // Must be within here; otherwise does not work in the right order!!
+                        // NOTE: Above hack needed as not sure how to replace Object fully without inheriting the Observables!!
+                        // NOTE to NOTE above: Getter/Setter is correctly meld on to it .. as an Observable; as long as we get data
+                        //      to see structure; can use JSON.stringify ..
+                        // Does it change?? probably related to the $set .. no clue :P
+                        // console.error("HIERARCHIES:", util.inspect(JSON.parse(this.state.hierarchies.items), {depth: 10}))
+                        // console.error("MEASURES:", util.inspect(JSON.parse(this.state.measures.items), {depth: 10}))
+                        // console.error("DIMENSIONS:", util.inspect(JSON.parse(this.state.dimensions.items), {depth: 10}))
+                        // If has initstate; do something about it .. merge via Object.assign??
+                        // params below generated form URL?  filters === cut??
+                        this.chooseStateParams(this.params)
+
+                        // Set the currents; dupe here??
+
+                        // Pass to the component; one time?
+                    }.bind(this)
             ).catch(
                     function (err) {
                         console.error("ERR:", util.inspect(err))
                     }
             )
 
-            // If has initstate; do something about it .. merge via Object.assign??
-            // params below generated form URL?  filters === cut??
-            this.chooseStateParams(this.params)
-
-            // Set the currents; dupe here??
-
-            // Pass to the component; one time?
 
         },
         methods: {
@@ -116,6 +156,46 @@
                 // if have defaultParams; extract those and set in the DATA set
                 if (defaultParams == null || defaultParams == undefined) {
                     // Nothign passed; so that the babage overall and select
+                    // Pick from the first item of hierarchies, measures, dimensions ..
+                    const hierarchies = this.state.hierarchies.items
+                    const measures = this.state.measures.items
+                    // const dimensions = JSON.parse(this.state.dimensions.items)
+                    const dimensions = this.state.dimensions.items
+
+                    // Not needed ...
+                    // this.initstate = Object.assign({}, {h: hierarchies, m: measures, d: dimensions})
+
+                    // Select first item from hierarchies; pick it; pick the first item in its levels
+                    // == save to ==> chosen_dimension
+                    let chosen_dimension = null
+                    for (let key of Object.keys(hierarchies)) {
+                        // TODO: What is ES6 way to make this more robust when it does not fit the exception??
+                        chosen_dimension = hierarchies[key].levels[0]
+                        // console.log("Default Selection: ", util.inspect(chosen_dimension, {depth: 10}))
+                        break
+                    }
+
+                    // Select first item from measures == save to ==> initstate.aggregates
+                    this.initstate.aggregates = measures[0].key
+
+                    // Select first item from dimensions with key <chosen_dimension> == save to ==> initstate.groups
+                    for (let dimension of dimensions) {
+
+                        // What is the key used to refer ==> ID .id
+                        // DEBUG:
+                        // console.log("DIM: %s STRUCT: %s", dimension.id, util.inspect(dimension, {depth: 10}))
+                        // Pull out the drilldown too??
+                        if (chosen_dimension == dimension.id) {
+                            // console.error("KEY: %s DRILLDOWN: %s", dimension.key, dimension.drillDown)
+                            this.initstate.group = [ dimension.key ]
+                            this.initstate.drillDown = dimension.drillDown
+                            break
+                        }
+
+                    }
+
+                    // What would be the default orderBy?? The first item??
+                    console.error("INIT_STATE: A: %s G: %s", util.inspect(this.initstate.aggregates), util.inspect(this.initstate.group))
 
                 } else {
                     // set the current state using the passed defaultParams
@@ -123,18 +203,25 @@
                 // else Choose the defaults ..
                 // Set the currents ..
 
+                // OK; DEBUG: defaultinitSTate is
+                // console.error("STATE:", util.inspect(this.state, {depth: 10}))
                 // Finally
-                //           updateBabbage();
+                this.updateBabbage()
+                //   updateBabbage();
                 // updateLocation();
 
             },
-            drillDown: function (value) {
+            drillDown: function (chosen_key) {
 
+                console.error("drillDown on KEY: %s TO: %s", chosen_key, this.initstate.drillDown)
                 // Optional; check if it is found in the original model structure
 
                 // append value to the current dimension label; add to filter to cut
 
                 // trigger refresh .. of state to pass into component; trigger watch changes??
+
+                // ADDD to filter: current_level : chosen_key
+                // Change the group to drillDown; that will become the new current_level
 
             },
             refreshBabbageComponents: function () {
@@ -145,7 +232,9 @@
                 // Requeueing as per: http://stackoverflow.com/questions/779379/why-is-settimeoutfn-0-sometimes-useful
             },
             updateBabbage: function () {
-                // call Utils.prepareBabbageParams
+                // call Utils.prepareBabbageParams; bind to current context state so we get the state we need
+                // const new_initstate = Utils.prepareBabbageParams.call(this.state)
+                this.$broadcast('update-babbage', this.initstate)
                 // call updateBreadCrumbs
                 // call refreshBabbageComponents
 

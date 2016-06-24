@@ -4,6 +4,8 @@
 "use strict"
 
 function prepareBabbageParams() {
+    // Assumptions: this context is mapped to the currrent state structure ..
+    console.error("INSIDE prepareBabbageParams")
 /*
  var cut = _.map(
  $scope.state.dimensions.current.filters,

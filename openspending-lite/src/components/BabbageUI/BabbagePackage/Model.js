@@ -51,6 +51,8 @@ const osViewerService = {
             const p = api.getPackageModel(connection.endpoint, connection.cube)
             p.then(
                 (model) => {
+                    // DEBUG:
+                    // console.error("getPackageModel:", util.inspect(model, {depth:10}))
                     resolve(model.hierarchies)
                 }
             ).catch(
@@ -66,6 +68,8 @@ const osViewerService = {
             const p = api.getMeasures(connection.endpoint, connection.cube)
             p.then(
                 (measures) => {
+                    // DEBUG:
+                    // console.error("getMeasures:", util.inspect(measures, {depth:10}))
                     resolve(measures)
                 }
             ).catch(
