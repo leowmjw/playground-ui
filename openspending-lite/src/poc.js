@@ -5,6 +5,7 @@ import config from './config'
 import repoArangoDB from './libs/repo-arangodb'
 import TableComponent from './components/BabbageUI/components/table'
 import {Api} from './components/BabbageUI/api/index'
+import _ from 'lodash'
 
 const api = new Api()
 
@@ -12,7 +13,100 @@ const api = new Api()
 // Execute via babel-node
 // scenario_babbageui_table_component()
 // scenario_dimension_hiearachy()
-scenario_dimension_hiearachy_promise_all()
+// scenario_dimension_hiearachy_promise_all()
+scenario_prepare_babbage_state()
+
+function scenario_prepare_babbage_state() {
+
+    const bob = [
+        {
+            "economic_classification_Top_x.Top_Level_x_1": "1.1"
+        },
+        {
+            "economic_classification_Level.Level_1_x_2": "1.1.0"
+        }
+    ]
+
+    // console.error(util.inspect(JSON.stringify(bob), {depth: 10}))
+
+    let state_filter = [] // [{"Top_x_1": "abc"},{"Fisrt_1_x": "def"}]
+    // state_filter["abc.def.sf_23"] = "1234"
+    // state_filter.push('Top_x_1', "abc")
+    // state_filter.push("Fisrt_1_x", "def")
+    // state_filter.push("Second_2x.234:234")
+    /*const new_filter
+    state_filter.push(JSON.stringify({
+        "economic_classification_Top_x.Top_Level_x_1": "1.1"
+    }))
+    state_filter.push(JSON.stringify({
+        "economic_classification_Level.Level_1_x_2": "1.1.0"
+    }))
+    */
+    const a = "1.1"
+    const b = "1.1.0"
+    state_filter.push(`economic_classification_Top_x.Top_Level_x_1:"${a}"`)
+    state_filter.push(`economic_classification_Level.Level_1_x_2:"${b}"`)
+    console.error(util.inspect(state_filter.join("|")))
+    /*
+     state_filter.map(function (key, value) {
+     console.log("FULL_KEY: %s:%s", util.inspect(key), value)
+     })
+
+     _.map(state_filter, function (key, value) {
+     console.log("FULL_KEY: %s:%s", util.inspect(key), value)
+
+     })
+     */
+
+    const endpoint = "http://next.openspending.org/api/3"
+    // const cube = "boost:boost-moldova-2005-2014"
+    const cube = "0638aadc448427e8b617257ad01cd38a:kpkt-propose-2016-hierarchy-test"
+
+    const state = {
+        // aggregates: ["Amount.sum"],
+        group: ["economic_classification_Level_2.Level_2_x_3"],
+        // group: ["functional_classification_2.Item"],
+        // order: [{key: "Amount.sum", direction: 'asc'}],
+        // filter: state_filter,
+        filter: state_filter
+        // page: 30
+    }
+
+    // console.log("STATE:", util.inspect(state, {depth: 10}))
+    /*
+     const p = new Promise((resolve, reject) => {
+     return api.aggregate(endpoint, cube, state)
+     .then(resolve)
+     .catch(reject)
+     })
+     p.then((values) => {
+     console.log("RESULTS:", util.inspect(values, {depth: 10}))
+     }).catch(
+     (err) => {
+     console.error("ERR:", err)
+     }
+     )
+     */
+
+    const babbageTable = new TableComponent()
+    const p = new Promise((resolve, reject) => {
+        babbageTable.getTableData(endpoint, cube, state)
+            .then(resolve)
+            .catch(reject)
+    })
+    // Execute promise ..
+    p.then((tableData) => {
+            console.error("RESULT: ", util.inspect(tableData, {colors: true, depth: 10}))
+            result.tableData = tableData
+        }
+    ).catch(
+        (err) => {
+            console.error("ERR:", util.inspect(err, {depth: 10}))
+
+        }
+    )
+
+}
 
 function scenario_dimension_hiearachy_promise_all() {
 
@@ -70,32 +164,32 @@ function scenario_dimension_hiearachy_promise_all() {
 
     /* NOTE: Promise.all without new!!
 
-    const n = new Promise(function (resolve, reject) {
-        const p1 = api.getDimensions(connection.endpoint, connection.cube)
-        p1.then(
-            (results) => {
-                let promises = []
-                for (let singleDimension of results) {
-                    const myq = api.getDimensionMembers(connection.endpoint, connection.cube, singleDimension.key)
-                    promises.push(myq)
-                }
-                const p2 = Promise.all(promises)
-                p2.then(
-                    (result) => {
-                        console.log("DONE!!!", util.inspect(result))
-                    },
-                    (err) => {
-                        console.log("ERR:", util.inspect(err))
-                    }
-                )
-            }
-        ).catch(
-            (err) => {
-                reject("ERRp1:", util.inspect(err, {depth: 10}))
-            }
-        )
-    })
-    */
+     const n = new Promise(function (resolve, reject) {
+     const p1 = api.getDimensions(connection.endpoint, connection.cube)
+     p1.then(
+     (results) => {
+     let promises = []
+     for (let singleDimension of results) {
+     const myq = api.getDimensionMembers(connection.endpoint, connection.cube, singleDimension.key)
+     promises.push(myq)
+     }
+     const p2 = Promise.all(promises)
+     p2.then(
+     (result) => {
+     console.log("DONE!!!", util.inspect(result))
+     },
+     (err) => {
+     console.log("ERR:", util.inspect(err))
+     }
+     )
+     }
+     ).catch(
+     (err) => {
+     reject("ERRp1:", util.inspect(err, {depth: 10}))
+     }
+     )
+     })
+     */
 
     mypro.push(p)
 

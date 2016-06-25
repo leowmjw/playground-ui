@@ -1,17 +1,65 @@
-<style>
+<style scoped>
 
+    .x-visualization-add, .x-visualization-container.well {
+        background: #fff;
+        margin: .5em 0
+    }
 
+    .x-visualization-container.x-fixed-visualization .table-babbage {
+        min-height: 0
+    }
+
+    /*
+        .x-visualization-container > div {
+            position: relative
+        }
+
+        .x-visualization-container .x-visualization-chart {
+            position: relative;
+            min-height: 150px
+        }
+
+        .x-visualization-container .x-visualization-info {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            z-index: 990
+        }
+
+        .x-visualization-container .x-visualization-buttons {
+            position: absolute;
+            top: 0;
+            right: 15px;
+            white-space: nowrap;
+            font-size: 200%;
+            z-index: 999
+        }
+
+        .x-visualization-container .x-visualization-buttons a {
+            color: silver;
+            text-decoration: none
+        }
+
+        .x-visualization-container .x-visualization-buttons a:active, .x-visualization-container .x-visualization-buttons a:hover {
+            color: #cdcdcd;
+            text-decoration: none
+        }
+
+        */
 </style>
 
 <template>
 
     <measures></measures>
-    <treemap
-            :treemapid="packageid"
-            :cube="cube"
-            :endpoint="endpoint"
-    ></treemap>
-
+    <div class="well x-visualization-container">
+        <treemap
+                :treemapid="packageid"
+                :cube="cube"
+                :endpoint="endpoint"
+        ></treemap>
+    </div>
+</template>
 </template>
 
 <script>
@@ -167,16 +215,18 @@
 
                     // Select first item from hierarchies; pick it; pick the first item in its levels
                     // == save to ==> chosen_dimension
-                    let chosen_dimension = null
+                    let chosen_hierarchy
                     for (let key of Object.keys(hierarchies)) {
                         // TODO: What is ES6 way to make this more robust when it does not fit the exception??
-                        chosen_dimension = hierarchies[key].levels[0]
+                        chosen_hierarchy = hierarchies[key].levels[0]
                         // console.log("Default Selection: ", util.inspect(chosen_dimension, {depth: 10}))
+                        this.state.hierarchies.current = chosen_hierarchy
                         break
                     }
 
                     // Select first item from measures == save to ==> initstate.aggregates
-                    this.initstate.aggregates = measures[0].key
+                    this.state.measures.current = measures[0].key
+                    this.initstate.aggregates = this.state.measures.current
 
                     // Select first item from dimensions with key <chosen_dimension> == save to ==> initstate.groups
                     for (let dimension of dimensions) {
@@ -185,9 +235,11 @@
                         // DEBUG:
                         // console.log("DIM: %s STRUCT: %s", dimension.id, util.inspect(dimension, {depth: 10}))
                         // Pull out the drilldown too??
-                        if (chosen_dimension == dimension.id) {
+                        if (chosen_hierarchy == dimension.id) {
+                            // Store for later reuse ..
+                            this.state.dimensions.current.groups = dimension
                             // console.error("KEY: %s DRILLDOWN: %s", dimension.key, dimension.drillDown)
-                            this.initstate.group = [ dimension.key ]
+                            this.initstate.group = [dimension.key]
                             this.initstate.drillDown = dimension.drillDown
                             break
                         }
@@ -195,7 +247,7 @@
                     }
 
                     // What would be the default orderBy?? The first item??
-                    console.error("INIT_STATE: A: %s G: %s", util.inspect(this.initstate.aggregates), util.inspect(this.initstate.group))
+                    // console.error("INIT_STATE: A: %s G: %s", util.inspect(this.initstate.aggregates), util.inspect(this.initstate.group))
 
                 } else {
                     // set the current state using the passed defaultParams
@@ -212,16 +264,41 @@
 
             },
             drillDown: function (chosen_key) {
-
-                console.error("drillDown on KEY: %s TO: %s", chosen_key, this.initstate.drillDown)
+                // DEBUG:
+                // console.error("drillDown on KEY: %s TO: %s", util.inspect(chosen_key), this.initstate.drillDown)
                 // Optional; check if it is found in the original model structure
 
                 // append value to the current dimension label; add to filter to cut
 
                 // trigger refresh .. of state to pass into component; trigger watch changes??
 
-                // ADDD to filter: current_level : chosen_key
-                // Change the group to drillDown; that will become the new current_level
+                if (this.initstate.drillDown == undefined || this.initstate.drillDown == null) {
+                    // Do nothing
+                } else {
+                    // ADDD to filter: current_level : chosen_key
+                    // Change the group to drillDown; that will become the new current_level
+                    let new_filter = `${this.initstate.group}:"${chosen_key}"`
+                    // Append it into the filter array ..
+                    this.initstate.filter.push(new_filter)
+
+                    for (let dimension of this.state.dimensions.items) {
+                        // DEBUG:
+                        // console.error("Compare: %s to %s", this.initstate.drillDown, dimension.key)
+                        // Look for the matching item; use KEY here instead of ID; may be confusing; better way to encapsulate??
+                        if (this.initstate.drillDown == dimension.key) {
+                            // Store for later reuse ..
+                            this.state.dimensions.current.groups = dimension
+                            console.error("KEY: %s DRILLDOWN: %s", dimension.key, dimension.drillDown)
+                            this.initstate.group = [dimension.key]
+                            this.initstate.drillDown = dimension.drillDown
+                            break
+                        }
+                    }
+                    // If want to be robust; make sure there is a new_filter??
+                    console.log("NEW_FILTER: ", util.inspect(this.initstate.filter, {depth: 10}))
+                    // refresh ...
+                    this.updateBabbage()
+                }
 
             },
             refreshBabbageComponents: function () {

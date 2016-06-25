@@ -1,6 +1,6 @@
 <style>
     .treemap-chart {
-        min-height: 500px;
+        // min-height: 500px;
         overflow: hidden
     }
 
@@ -201,7 +201,8 @@
                 // The signal will change the initstate which will trigger a rebuild
                 // should be a better way to reuse built items
                 treeMap.on('click', function (treeMapComponent, item) {
-                            this.$dispatch('treemap-click', item)
+                            // item has a whole bunch of stuff; make sure you pass on only the key!!
+                            this.$dispatch('treemap-click', item._key)
                         }.bind(this)
                 )
             },
