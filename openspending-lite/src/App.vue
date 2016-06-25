@@ -1,4 +1,4 @@
-<style>
+<style scoped>
     /* Global Style here ... */
     /*!
      * Start Bootstrap - 2 Col Portfolio HTML Template (http://startbootstrap.com)
