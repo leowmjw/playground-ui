@@ -42,6 +42,10 @@ function _initGmaps() {
         // OK, now create the Map and Marker ... the hooking is done since context is passed in it
         _setupMapMarker.call(this, final_lat, final_lng)
 
+        // Bubble signal up to parent
+        this.$dispatch('finish-map-setup')
+
+
     } else {
         // Initialized already; nothing further to do; a singleton .. yuck!
     }
@@ -83,6 +87,7 @@ function _setupMapMarker(final_lat, final_lng) {
         }
 
     });
+
 }
 
 function _refreshGeoLocation(callThisWhenHavePosition, mylat, mylng) {

@@ -1,6 +1,10 @@
-<style>
+<style scoped>
     .placeholder {
         margin-bottom: 20px;
+    }
+
+    .placeholder2 {
+        margin-top: 120px;
     }
 
     .placeholder h4 {
@@ -15,58 +19,86 @@
 </style>
 
 <template>
-    <!-- Search -->
-    <div class="col-md-6">
-        <div class="placeholder">
-            <input type="text" v-model="keyword"
-                   @keyup="searchByKeyword | debounce 300"
-                   placeholder="Search Name (Tony, Aziz)"
-            >
+    <template v-if="type === 'area'">
+
+        <div class="placeholder2 hidden-sm">
+            &nbsp;
         </div>
-        <div class="placeholder">
-            <h3>DEBUG: Turn off in config.js</h3>
-            {{ debugresult }}
-        </div>
-        <div class="placeholder" v-for="item in result">
-            <img :src="item.image ? item.image.toString() :
+        <div>
+            <div class="placeholder" v-for="item in state.result">
+                <input type="hidden" v-model="state.keyword"
+                       @keyup="searchAreaByKeyword | debounce 300"
+                       placeholder="Search Area (P001, Serdang) .."
+                >
+                <img :src="item.image ? item.image.toString() :
             'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Replace_this_image_female.svg/150px-Replace_this_image_female.svg.png'"
-                 width="100" height="auto"
-                 class="img-thumbnail" alt="{{ item.area.id ? item.area.id.toString() : '' }}">
-            <h4>{{ item.name ? item.name.toString() : '' }}</h4>
+                     width="100" height="auto"
+                     class="img-thumbnail" alt="{{ item.area.id ? item.area.id.toString() : '' }}">
+                <h4>{{ item.name ? item.name.toString() : '' }}</h4>
+                <span class="text-muted">
+                    {{ item.area.id ? item.area.id.toString() : '' }}:
+                    {{ item.label ? item.label.toString() : '' }},
+                    {{ item.area.state ? item.area.state.toString() : ''  }}
+                </span>
+            </div>
+        </div>
+
+    </template>
+    <template v-else>
+        <!-- Search -->
+        <div class="col-md-6">
+            <div class="placeholder">
+                <input type="text" v-model="keyword"
+                       @keyup="searchByKeyword | debounce 300"
+                       placeholder="Search Name (Tony, Aziz)"
+                >
+            </div>
+            <div class="placeholder">
+                <h3>DEBUG: Turn off in config.js</h3>
+                {{ debugresult }}
+            </div>
+            <div class="placeholder" v-for="item in result">
+                <img :src="item.image ? item.image.toString() :
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Replace_this_image_female.svg/150px-Replace_this_image_female.svg.png'"
+                     width="100" height="auto"
+                     class="img-thumbnail" alt="{{ item.area.id ? item.area.id.toString() : '' }}">
+                <h4>{{ item.name ? item.name.toString() : '' }}</h4>
             <span class="text-muted">
                 {{ item.area.id ? item.area.id.toString() : '' }}:
                 {{ item.label ? item.label.toString() : '' }},
                 {{ item.area.state ? item.area.state.toString() : '' }}
             </span>
-            <button @click="filterByArea(item.area.id ? item.area.id.toString() : '')">Filter Area</button>
+                <button @click="filterByArea(item.area.id ? item.area.id.toString() : '')">Filter Area</button>
+            </div>
         </div>
-    </div>
-    <div class="col-md-6 placeholder">
-        <div class="placeholder">
-            <input type="text" v-model="state.keyword"
-                   @keyup="searchAreaByKeyword | debounce 300"
-                   placeholder="Search Area (P001, Serdang) .."
-            >
-        </div>
-        <div class="placeholder">
-            <h3>DEBUG: Turn off in config.js</h3>
-            {{ state.debugresult }}
-        </div>
-        <div class="placeholder" v-for="item in state.result">
-            <img :src="item.image ? item.image.toString() :
+        <div class="col-md-6 placeholder">
+            <div class="placeholder">
+                <input type="text" v-model="state.keyword"
+                       @keyup="searchAreaByKeyword | debounce 300"
+                       placeholder="Search Area (P001, Serdang) .."
+                >
+            </div>
+            <div class="placeholder">
+                <h3>DEBUG: Turn off in config.js</h3>
+                {{ state.debugresult }}
+            </div>
+            <div class="placeholder" v-for="item in state.result">
+                <img :src="item.image ? item.image.toString() :
             'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Replace_this_image_female.svg/150px-Replace_this_image_female.svg.png'"
-                 width="100" height="auto"
-                 class="img-thumbnail" alt="{{ item.area.id ? item.area.id.toString() : '' }}">
-            <h4>{{ item.name ? item.name.toString() : '' }}</h4>
+                     width="100" height="auto"
+                     class="img-thumbnail" alt="{{ item.area.id ? item.area.id.toString() : '' }}">
+                <h4>{{ item.name ? item.name.toString() : '' }}</h4>
             <span class="text-muted">
                 {{ item.area.id ? item.area.id.toString() : '' }}:
                 {{ item.label ? item.label.toString() : '' }},
                 {{ item.area.state ? item.area.state.toString() : ''  }}
             </span>
-            <button @click="showAreaMap(item.area.id ? item.area.id.toString() : '')">Show Area Map</button>
+                <button @click="showAreaMap(item.area.id ? item.area.id.toString() : '')">Show Area Map</button>
+            </div>
         </div>
-    </div>
-    <!-- Debounce -->
+        <!-- Debounce -->
+
+    </template>
 
 </template>
 
@@ -77,7 +109,7 @@
     let util = require('util')
 
     export default {
-        props: ['searcharea', 'selectedarea'],
+        props: ['searcharea', 'selectedarea', 'type'],
         components: {},
         data () {
             return {
@@ -99,9 +131,9 @@
                 // DEBUG:
                 // console.error("AREA CHANGED!!!! NEW: %s OLD: %s", area_id, old)
                 // TODO: Trigger searchByArea ..
-                 this.selectedarea = area_id
-                 this.state.keyword = area_id
-                 this.searchAreaByKeyword()
+                this.selectedarea = area_id
+                this.state.keyword = area_id
+                this.searchAreaByKeyword()
             }
 
         },
@@ -141,7 +173,7 @@
                     this.searchAreaByKeyword()
                 }
             },
-            showAreaMap: function(area_id) {
+            showAreaMap: function (area_id) {
                 area_id = area_id.trim()
                 if (area_id == null || area_id == undefined || area_id == '') {
                     console.error("Nothing to do ..")

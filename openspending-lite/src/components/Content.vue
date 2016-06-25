@@ -1,4 +1,4 @@
-<style>
+<style scoped>
 
     .portfolio-item {
         margin-bottom: 25px;
@@ -26,22 +26,28 @@
         </div>
         <!-- /.row -->
 
-        <!-- Aduanku Row -->
+        <!-- BabbageUI Row -->
         <div class="row">
-            <aduanku></aduanku>
-            <!--
-            <div class="col-md-6 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project Four</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida
-                    pellentesque urna varius vitae.</p>
-            </div>
-            -->
+            <babbageui></babbageui>
         </div>
+        <!-- /.row -->
+
+        <!-- Aduanku Row -->
+        <!--
+    <div class="row">
+        <aduanku></aduanku>
+        <div class="col-md-6 portfolio-item">
+            <a href="#">
+                <img class="img-responsive" src="http://placehold.it/700x400" alt="">
+            </a>
+            <h3>
+                <a href="#">Project Four</a>
+            </h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida
+                pellentesque urna varius vitae.</p>
+        </div>
+    </div>
+        -->
         <!-- /.row -->
 
         <!-- Projects Row -->
@@ -145,6 +151,7 @@
     import MPSearch from './MPSearch.vue'
     import GMaps from './GMaps.vue'
     import Aduanku from './Aduanku.vue'
+    import BabbageUI from './BabbageUI.vue'
 
 
     export default {
@@ -153,7 +160,8 @@
             popit: PopIt,
             mpsearch: MPSearch,
             gmaps: GMaps,
-            aduanku: Aduanku
+            aduanku: Aduanku,
+            babbageui: BabbageUI
         },
         data () {
             return {
