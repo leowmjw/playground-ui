@@ -50,14 +50,23 @@
 </style>
 
 <template>
+    <!--
 
     <measures></measures>
+    -->
     <div class="well x-visualization-container">
         <treemap
                 :treemapid="packageid"
                 :cube="cube"
                 :endpoint="endpoint"
         ></treemap>
+    </div>
+    <div class="well x-visualization-container">
+        <bubbletree
+                :bubbletreeid="packageid"
+                :cube="cube"
+                :endpoint="endpoint"
+        ></bubbletree>
     </div>
 </template>
 </template>
@@ -71,6 +80,7 @@
     // Subcomponents inside ..
     import Measures from './fragments/Measures.vue'
     import TreeMap from './bindings/vuejs/TreeMap.vue'
+    import BubbleTree from './bindings/vuejs/BubbleTree.vue'
 
     // NOTE: We will only support drilldown types
     // TreeMap + BubbleTree??
@@ -80,7 +90,8 @@
         props: ['cube', 'endpoint', 'type', 'packageid', 'params'],
         components: {
             measures: Measures,
-            treemap: TreeMap
+            treemap: TreeMap,
+            bubbletree: BubbleTree
         },
         data () {
             return {
@@ -124,6 +135,12 @@
                 console.error("TREEMAP-CLICK!!!")
                 // Call the Drilldown method now ...
                 // Extract out the key??
+                this.drillDown(chosen_key)
+            },
+            'bubbletree-click': function (chosen_key) {
+                console.error("BUBBLETREE-CLICK!!!")
+                // Call the Drilldown method now ...
+                // Should behavior be different when with BubbleTree vs TreeMap??
                 this.drillDown(chosen_key)
             },
             'dispatch-from-parent': function (msg) {
