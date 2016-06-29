@@ -50,9 +50,10 @@
 </style>
 
 <template>
+    <!--
 
     <measures></measures>
-    <!--
+    -->
     <div class="well x-visualization-container">
         <treemap
                 :treemapid="packageid"
@@ -60,13 +61,11 @@
                 :endpoint="endpoint"
         ></treemap>
     </div>
-    -->
-    <div>
+    <div class="well x-visualization-container">
         <bubbletree
                 :bubbletreeid="packageid"
                 :cube="cube"
                 :endpoint="endpoint"
-                simulation="true"
         ></bubbletree>
     </div>
 </template>

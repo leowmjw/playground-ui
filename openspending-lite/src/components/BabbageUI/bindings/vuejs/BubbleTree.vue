@@ -1,18 +1,22 @@
 <style>
+    /* NOTE: This component style CANNOT be scoped!! */
+
     .bubbletree, .bubbletree .bubbletree-label2 span {
         background: #fff
     }
 
     .bubbletree-wrapper {
         width: 100%;
-        height: 100%;
-        position: absolute
+        padding-top: 60%;
+        position: relative
     }
 
     .bubbletree {
-        position: relative;
-        height: 100%;
-        overflow: hidden
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%
     }
 
     .bubbletree .bubbletree-label {
@@ -44,22 +48,25 @@
 
 <template>
 
-    <div class="alert-babbage" ng-hide="queryLoaded">
+    <!--
+    <div class="alert-babbage">
         <div class="alert alert-info">
             <strong>You have not selected any data.</strong> Please choose the
             configuration for your chart.
         </div>
     </div>
 
-    <div class="alert alert-warning" ng-show="cutoffWarning">
+    <div class="alert alert-warning">
         <strong>Too many categories.</strong> There are more than ((XXX CUTOFF)) items
         in the selected drilldown.
     </div>
 
-    <div style="width: 100%; padding-top: 60%; position: relative">
+    -->
+
+    <div class="bubbletree-wrapper">
         <div id="bubbletree-{{ bubbletreeid }}"
              class="bubbletree"
-             style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%">
+        >
         </div>
     </div>
 
@@ -87,15 +94,15 @@
                 }
             }
         },
-        watch: {
+        watch: {},
+        events: {
             'bubbletree-click-simulation': function () {
                 console.error("BUBBLETREEC")
             },
             'update-babbage': function (new_initstate) {
-                console.error("FROM_PARENT_UPDATE_BABBAGE::")
-                // this.state = new_initstate
-                // this.rebuildBubbleTree()
-
+                console.error("FROM_PARENT_UPDATE_BABBAGE::", util.inspect(new_initstate, {depth: 10}))
+                this.state = new_initstate
+                this.rebuildBubbleTree()
             }
         },
         ready () {
@@ -120,8 +127,8 @@
                 // console.error("WRAPPER: %s %s", typeof(wrapper), util.inspect(wrapper))
                 bubbleTree.build(endpoint, cube, state, wrapper);
                 bubbleTree.on('click', function (bubbleTreeComponent, item) {
-                            $scope.$emit('bubbletree-click-simulation', bubbleTreeComponent, item)
-                            console.error("KEY:", item._key)
+                            this.$emit('bubbletree-click-simulation', bubbleTreeComponent, item)
+                            console.error("KEY:", item.label)
                             // Simulate a drilldown happening
                             this.simulateDrillDown()
 
@@ -144,8 +151,8 @@
                 bubbleTree.build(this.endpoint, this.cube, this.state, wrapper);
                 bubbleTree.on('click', function (bubbleTreeComponent, item) {
                             // DEBUG
-                            // console.error("KEY:", item._key)
-                            $scope.$dispatch('bubbletree-click', item._key)
+                            console.error("KEY:", item.label)
+                            this.$dispatch('bubbletree-click', item.label)
                         }.bind(this)
                 )
 
