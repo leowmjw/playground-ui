@@ -54,21 +54,27 @@
 
     <measures></measures>
     -->
-    <div class="well x-visualization-container">
+    <div class="col-md-8 well x-visualization-container">
         <treemap
                 :treemapid="packageid"
                 :cube="cube"
                 :endpoint="endpoint"
         ></treemap>
     </div>
-    <div class="well x-visualization-container">
+    <div class="col-md-4 well x-visualization-container">
         <bubbletree
                 :bubbletreeid="packageid"
                 :cube="cube"
                 :endpoint="endpoint"
         ></bubbletree>
     </div>
-</template>
+    <div class="col-md-12 well x-visualization-container">
+        <pie
+                :pieid="packageid"
+                :cube="cube"
+                :endpoint="endpoint"
+        ></pie>
+    </div>
 </template>
 
 <script>
@@ -81,6 +87,7 @@
     import Measures from './fragments/Measures.vue'
     import TreeMap from './bindings/vuejs/TreeMap.vue'
     import BubbleTree from './bindings/vuejs/BubbleTree.vue'
+    import Pie from './bindings/vuejs/Pie.vue'
 
     // NOTE: We will only support drilldown types
     // TreeMap + BubbleTree??
@@ -91,7 +98,8 @@
         components: {
             measures: Measures,
             treemap: TreeMap,
-            bubbletree: BubbleTree
+            bubbletree: BubbleTree,
+            pie: Pie
         },
         data () {
             return {
@@ -139,6 +147,12 @@
             },
             'bubbletree-click': function (chosen_key) {
                 console.error("BUBBLETREE-CLICK!!!")
+                // Call the Drilldown method now ...
+                // Should behavior be different when with BubbleTree vs TreeMap??
+                this.drillDown(chosen_key)
+            },
+            'babbage-click': function (chosen_key) {
+                console.error("BABBAGE-CLICK!!! KEY:", chosen_key)
                 // Call the Drilldown method now ...
                 // Should behavior be different when with BubbleTree vs TreeMap??
                 this.drillDown(chosen_key)
@@ -318,13 +332,6 @@
                 }
 
             },
-            refreshBabbageComponents: function () {
-                // Maybe: http://stackoverflow.com/questions/34255351/is-there-a-version-of-settimeout-that-returns-an-es6-promise
-                // why??
-                // changes state.flag.renderingCharts
-                // Promise within promise ??
-                // Requeueing as per: http://stackoverflow.com/questions/779379/why-is-settimeoutfn-0-sometimes-useful
-            },
             updateBabbage: function () {
                 // call Utils.prepareBabbageParams; bind to current context state so we get the state we need
                 // const new_initstate = Utils.prepareBabbageParams.call(this.state)
@@ -335,6 +342,13 @@
             },
             updateBreadCrumbs: function () {
 
+            },
+            refreshBabbageComponents: function () {
+                // Maybe: http://stackoverflow.com/questions/34255351/is-there-a-version-of-settimeout-that-returns-an-es6-promise
+                // why??
+                // changes state.flag.renderingCharts
+                // Promise within promise ??
+                // Requeueing as per: http://stackoverflow.com/questions/779379/why-is-settimeoutfn-0-sometimes-useful
             }
 
         },
