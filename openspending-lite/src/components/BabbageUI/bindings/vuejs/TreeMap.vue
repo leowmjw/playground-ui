@@ -1,6 +1,6 @@
 <style>
     .treemap-chart {
-        // min-height: 500px;
+    / / min-height: 500 px;
         overflow: hidden
     }
 
@@ -35,19 +35,20 @@
 <template>
 
     <div>
+        <!--
+                <div class="alert-babbage">
+                    <div class="alert alert-info">
+                        <strong>You have not selected any data.</strong> Please choose a breakdown for
+                        your treemap.
+                    </div>
+                </div>
 
-        <div class="alert-babbage">
-            <div class="alert alert-info">
-                <strong>You have not selected any data.</strong> Please choose a breakdown for
-                your treemap.
-            </div>
-        </div>
+                <div class="alert alert-warning">
+                    <strong>Too many tiles.</strong> The breakdown you have selected contains many
+                    different categories, only the ((XXX CUTOFF)) biggest are shown.
+                </div>
 
-        <div class="alert alert-warning">
-            <strong>Too many tiles.</strong> The breakdown you have selected contains many
-            different categories, only the ((XXX CUTOFF)) biggest are shown.
-        </div>
-
+        -->
         <div id="treemap-{{ treemapid }}" class="treemap-chart"></div>
 
     </div>
@@ -101,14 +102,14 @@
                 console.error("OLD_INITSTATE:", util.inspect(oldval.aggregates, {depth: 10}))
                 console.error("NEW_INITSTATE:", util.inspect(val.aggregates, {depth: 10}))
                 /*
-                const treeMap = new TreeMapComponent()
-                const wrapper = document.querySelector(`div#treemap-${this.packageid}`)
-                treeMap.build(this.endpoint, this.cube, this.initstate, wrapper)
-                treeMap.on('click', function (treeMapComponent, item) {
-                            this.$dispatch('treemap-click', item)
-                        }.bind(this)
-                )
-                */
+                 const treeMap = new TreeMapComponent()
+                 const wrapper = document.querySelector(`div#treemap-${this.packageid}`)
+                 treeMap.build(this.endpoint, this.cube, this.initstate, wrapper)
+                 treeMap.on('click', function (treeMapComponent, item) {
+                 this.$dispatch('treemap-click', item)
+                 }.bind(this)
+                 )
+                 */
             }
         },
         events: {
@@ -120,7 +121,7 @@
                 // this is not triggered :(
                 console.error("BEGINAGG")
             },
-            'update-babbage': function(new_initstate) {
+            'update-babbage': function (new_initstate) {
                 console.error("FROM_PARENT_UPDATE_BABBAGE::")
                 this.state = new_initstate
                 this.rebuildTreeMap()
@@ -189,8 +190,8 @@
 
         },
         methods: {
-            rebuildTreeMap: function() {
-              // Not as good; but will have to ask if there is a plan to remember rendered?
+            rebuildTreeMap: function () {
+                // Not as good; but will have to ask if there is a plan to remember rendered?
                 // Real thingn here ...
                 console.error("TREEMAP: Real thing here .. :P PACKAGEID: ", this.treemapid)
                 const treeMap = new TreeMapComponent()
