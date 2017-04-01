@@ -1,0 +1,56 @@
+/* card styles */
+.cards {
+}
+
+.card {
+}
+
+.card .face {
+}
+
+
+.card .face.cover {
+}
+
+.card .face.value {
+}
+
+.card.flipped .face.cover {
+}
+
+.card.card.flipped .face.value {
+}
+
+.card .face img {
+}
+
+/* top bar and message styles  */
+
+.top-bar {
+}
+
+.top-bar .right button {
+}
+
+.top-message {
+}
+
+.top-message p {
+}
+
+/* pop-up-modal */
+.pop-up-modal {
+}
+
+.pop-up-modal .message {
+}
+
+.pop-up-modal .message p {
+}
+
+.pop-up-modal button {
+}
+
+/* small device styles, smaller than ipad */
+@media (max-width: 768px) {
+}
