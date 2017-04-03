@@ -1,0 +1,101 @@
+/* card styles */
+.cards {
+    display: flex;
+    max-width: 100vh;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    position: relative;
+    width: 25vh;
+    height: 25vh;
+    margin: 10px;
+}
+
+.card .face {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    backface-visibility: hidden;
+    transition: transform 1.5s;
+}
+
+.card .face.cover {
+}
+
+.card .face.value {
+    transform: rotateY(-180deg);
+}
+
+.card.flipped .face.cover {
+    transform: rotateY(-180deg);
+}
+
+.card.flipped .face.value {
+    transform: rotateY(0deg);
+}
+
+.card .face img {
+    width: 25vh;
+    height: 25vh;
+    border-radius: 15px;
+}
+
+/* top bar and message styles  */
+
+.top-bar {
+    background-color: aquamarine;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px 20px;
+    margin-bottom: 15px;
+}
+
+.top-bar .right button {
+    background: red;
+    border: none;
+    padding: 5px 20px;
+}
+
+.top-message {
+    margin-bottom: 15px;
+}
+
+.top-message p {
+    text-align: center;
+    padding: 5px;
+}
+
+/* pop-up-modal */
+.pop-up-modal {
+}
+
+.pop-up-modal .message {
+}
+
+.pop-up-modal .message p {
+}
+
+.pop-up-modal button {
+}
+
+/* small device styles, smaller than ipad */
+@media (max-width: 768px) {
+    .card {
+        margin: 2px;
+        position: relative;
+        width: 25vw;
+        height: 25vw;
+    }
+
+    .card .face img {
+        width: 25vw;
+        height: 25vw;
+        border-radius: 6px;
+    }
+}

@@ -1,0 +1,55 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Mini Card Game">
+
+    <link rel="stylesheet" href="assets/vendor/reset.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="assets/images/icon-144.png">
+
+
+    <script src="assets/vendor/vue.min.js"></script>
+    <script src="assets/vendor/lodash.min.js"></script>
+    <title>Mini Card Game</title>
+</head>
+
+<body>
+<!--All your code here-->
+<script src="app.js" async></script>
+<div class="app" id="app">
+
+    <div class="top-bar">
+        <div class="left">FLIP & MATCH</div>
+        <div class="right">
+            <button>RESET</button>
+        </div>
+    </div>
+
+    <div class="top-message">
+        <p>{{ topMessage }}</p>
+        <p>00:00:00</p>
+    </div>
+
+    <div class="cards">
+        <div class="card"
+             v-for="card in cards"
+             @click="flipCard(card)"
+             :class="[{  flipped: card.isFlipped }]"
+        >
+            <div class="face cover">
+                <img :src="card.coverImg" alt="BOb"/>
+            </div>
+            <div class="face value">
+                <img :src="card.img" alt="DUDE"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>
+
